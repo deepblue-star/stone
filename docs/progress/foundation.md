@@ -23,7 +23,7 @@
 | 云函数原生 MySQL 连接 | 已验证 | business-api 云端查询成功；临时云端验证器完成真实多表事务 |
 | 20 张业务表与变更脚本 | 已验证 | 20 表结构核对通过；重复迁移 SKIP；另有 1 张迁移基础设施表 |
 | business-api 与统一协议 | 已实现并部署 | 仅开放 getPublicSiteConfig 和 getSiteConfig；协议、身份与日志测试通过 |
-| 小程序与管理端公共层 | 已实现，部分运行验收待完成 | 小程序模拟器已实际点击并成功查询配置，见 015；管理端有效管理员登录仍待验收 |
+| 小程序与管理端公共层 | 已实现，部分运行验收待完成 | 小程序模拟器实调通过；开发商家账号 SDK 登录及受保护接口通过，见 016；管理端浏览器成功登录界面仍待人工确认 |
 | 自动测试与真实云端验证 | 已执行 | 68 项单测；真实结构检查；云端事务 8 项检查通过，详见下方证据 |
 | 真机与第二台电脑 | 未验证 | 需要人工扫码和第二位开发者实际运行 |
 
@@ -168,3 +168,14 @@
 - 请求前查询 .results 返回 no such element；实际点击“检查连接”后读取成功结果。data 为 checked=true、loading=false、error 为空，requestId=af8a1441-ab33-4dd7-b845-40be8d7e030a，Banner 0、入口 0、客服未配置。此为小程序真实 wx.cloud 调用，不是固定 Mock。
 - npm run test:unit：8 个文件、71 项通过；typecheck、build 退出码 0，原 SDK 大包告警保留。
 - 按 CloudBase code review 检查本轮差异，仅涉及页面导航、显示条件和测试；没有改变认证、数据库、云函数权限或部署环境。模拟器实调验收已通过，真机、第二台电脑和有效管理员登录仍待验证。
+
+### 016 — 开通开发商家账号与权限验证
+
+- 用户明确要求代为创建商家账号。目标仍为开发环境 stone-d3gga4t2g2ffaedb6，没有改登录策略、现有用户或平台管理员权限。
+- 官方 CLI 帮助确认 tcb user create 支持 externalUser；先查现有同名账号和白名单，确认无目标账号、白名单为空，再创建 stone_merchant_dev（ACTIVE、externalUser）。未采用 CLI 默认的 internalUser 类型。
+- 首次生成密码超过平台上限，创建失败；通过官方文档检索及已安装 CLI 的确定校验确认密码需 8–32 位、包含字母数字。重新核实目标账号不存在后生成符合规则的随机密码，创建并回查成功。没有重置或覆盖任何现有账号。
+- 新账号 UID=2112607656078417922；仅插入该 UID 的 admin_allowlist 记录，display_name=Stone 开发商家、enabled=1、is_deleted=0，时间显式 UTC_TIMESTAMP；只读回查确认。
+- 凭据仅保存在 Git 忽略的 .local/merchant-login.json，文件 ACL 移除继承，仅当前 Windows 用户拥有权限；密码未输出到聊天、日志、源码或 Git。
+- 当前浏览器控制连接超时，未反复重试。改用已安装 @cloudbase/js-sdk 的 Node 条件入口验证同一 signInWithPassword/getSession/callFunction 流程：真实非匿名会话成功，受保护 getSiteConfig 返回 ok=true，request_id=dcd0c5ce-ccb1-11f1-acda-525400e4cc6c。随后退出验证会话，未保存 token。
+- 此项确认账号、密码及后端白名单有效，不等同于管理端浏览器表单全链路验收；可由用户在当前商家端登录确认。
+- 官方依据：https://docs.cloudbase.net/api-reference/manager/node/user；https://docs.cloudbase.net/api-reference/webv3/authentication#signinwithpassword；CLI 3.8.6 user create/list 帮助。

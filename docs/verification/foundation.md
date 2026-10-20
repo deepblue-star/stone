@@ -20,7 +20,7 @@
 | 云函数 | business-api，Event，Nodejs18.15，Active；查询实际 MySQL 成功 |
 | 管理端预览 | stone-admin-dev-002 部署成功；URL 返回 HTTP 200、HTML 正常 |
 | 本地管理端页面 | 未登录访问 / 自动转 #/login；登录请求中按钮禁用，错误后提示并恢复 |
-| 管理端实际授权登录 | 未验证；尚未建立并确认商家管理员 UID 与白名单 |
+| 管理端账号与授权 | 开发商家账号已创建并加白名单；SDK 密码登录及受保护接口实调通过；浏览器表单成功登录界面仍待人工确认 |
 | 小程序运行 | Skyline 配置修复后已正常显示；实际点击检查连接，真实 wx.cloud 查询成功；请求标识见下方补充 |
 | 真机与第二台电脑 | 未验证，需要实际扫码及第二位开发者复现 |
 | 密钥保护 | .env、.env.local、.local/、project.private.config.json 被 Git 忽略；未将密码输出到报告 |
@@ -63,7 +63,7 @@ https://stone-admin-dev-stone-d3gga4t2g2ffaedb6.webapps.tcloudbase.com/
 
 ### 剩余人工验收
 
-1. 人工确认商家管理端账号及 UID，再配置 admin_allowlist；数据库账号与应用登录账号不同。
+1. 开发商家账号 stone_merchant_dev 已开通；SDK signInWithPassword/getSession 及受保护 getSiteConfig 验证通过，request_id=dcd0c5ce-ccb1-11f1-acda-525400e4cc6c。用户可在管理端页面登录确认界面跳转；数据库账号与此应用登录账号不同。凭据仅在本机 Git 忽略且限制当前用户访问的 .local/merchant-login.json 中。
 2. 小程序模拟器联通已完成；后续业务页面仍需随模块实际验收。
 3. 扫码验证真实手机，第二位开发者按 docs/development.md 拉取运行。
 4. 继续处理 SDK 传递依赖告警，正式上线前完成依赖审查。
