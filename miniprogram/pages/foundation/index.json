@@ -1,6 +1,6 @@
 {
-  "navigationStyle": "default",
-  "navigationBarTitleText": "Stone 开发联通检查",
-  "navigationBarBackgroundColor": "#f5f6f2",
-  "navigationBarTextStyle": "black"
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
 }

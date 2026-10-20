@@ -13,7 +13,7 @@
 | 字段规则 | 字段存在、类型、非空、无符号、自增、注释、公共时间、索引与 CHECK 核验通过；site_config 按方案使用 config_key 主键 |
 | 严格类型检查 | npm run typecheck 通过，包括后端和 Vue |
 | 干净目录安装 | 仅 package.json/lock 的临时目录执行 npm ci，229 个包安装成功 |
-| 单元测试 | npm run test:unit：7 个文件、68 项测试通过 |
+| 单元测试 | Skyline 修复后复跑：8 个文件、71 项测试通过；包含 3 项小程序页面配置/条件显示回归测试 |
 | 本机集成测试 | 线上结构检查 1 项通过；受 VPC 网络边界限制，本机原生事务 2 项 skipped，不计为通过 |
 | 真实云端事务 | 独立 VPC 云函数验证 8 个检查全部通过，见下方请求标识 |
 | 构建 | npm run build 通过；CloudBase Web SDK 导致约 941 kB chunk 的体积告警保留 |
@@ -21,7 +21,7 @@
 | 管理端预览 | stone-admin-dev-002 部署成功；URL 返回 HTTP 200、HTML 正常 |
 | 本地管理端页面 | 未登录访问 / 自动转 #/login；登录请求中按钮禁用，错误后提示并恢复 |
 | 管理端实际授权登录 | 未验证；尚未建立并确认商家管理员 UID 与白名单 |
-| 小程序运行 | 已触发编译；automator 连续超时，不能证明实际页面运行和 wx.cloud 调用通过 |
+| 小程序运行 | Skyline 配置修复后已正常显示；实际点击检查连接，真实 wx.cloud 查询成功；请求标识见下方补充 |
 | 真机与第二台电脑 | 未验证，需要实际扫码及第二位开发者复现 |
 | 密钥保护 | .env、.env.local、.local/、project.private.config.json 被 Git 忽略；未将密码输出到报告 |
 | 依赖审计 | 尚未通过：官方 SDK 传递依赖有 6 项告警；没有使用 force 降级 SDK |
@@ -55,8 +55,16 @@ https://stone-admin-dev-stone-d3gga4t2g2ffaedb6.webapps.tcloudbase.com/
 
 ## 后续验收入口
 
+### 2026-10-21 补充：小程序模拟器联通已验证
+
+联通页改用 Skyline 要求的自定义导航，并复用项目现有导航组件；三处条件显示改为真实数据绑定，避免未请求就显示成功。新增回归测试均先观察到预期失败，修复后全部通过。最终完整单测为 71 项，类型检查及构建通过。
+
+实际元素点击后页面显示“公开配置读取成功”，读取 data 确认 checked=true、loading=false、error 为空；真实 request_id 为 af8a1441-ab33-4dd7-b845-40be8d7e030a。此结果替代先前“小程序运行未验证”状态，但不代表真机或第二台电脑已验收。
+
+### 剩余人工验收
+
 1. 人工确认商家管理端账号及 UID，再配置 admin_allowlist；数据库账号与应用登录账号不同。
-2. 在开发者工具中手动查看 pages/foundation/index 并点击检查连接，或修复 automator 连接后自动验证。
+2. 小程序模拟器联通已完成；后续业务页面仍需随模块实际验收。
 3. 扫码验证真实手机，第二位开发者按 docs/development.md 拉取运行。
 4. 继续处理 SDK 传递依赖告警，正式上线前完成依赖审查。
 
