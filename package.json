@@ -21,6 +21,7 @@
   "dependencies": {
     "@cloudbase/js-sdk": "^3.10.3",
     "@cloudbase/node-sdk": "^3.18.7",
+    "@lucide/vue": "^1.60.0",
     "mysql2": "^3.24.6",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0",
@@ -29,7 +30,9 @@
   "devDependencies": {
     "@types/node": "^24.19.2",
     "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "2.4.6",
     "esbuild": "^0.28.2",
+    "happy-dom": "^21.0.4",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vite": "^8.3.4",

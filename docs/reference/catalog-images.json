@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcnhyx1ZQiaCi1nGgArB32PRe\"><h3 id=\"doxcnhyx1ZQiaCi1nGgArB32PRe\" seq=\"auto\" seq-marker=\"4.7.5\">目录图片返回约定</h3><p id=\"doxcnAxCrWAiV3mdTHBRxmJNSqh\">商品与 SKU 图片保存在 CloudBase 私有云存储，数据库继续只保存上传返回的 cloud:// 文件标识，不保存临时 URL。管理端使用已登录账号通过 SDK 上传图片，后端保存目录资料前校验文件属于当前环境的 catalog/ 路径且可访问。</p><p id=\"doxcnWzIufdk2WGgKAnuvnHdYsy\">getAdminCatalogItem、listStandardItems、getStandardItemDetail 和 listDiyMaterials 的 data 增加 image_urls 字段，类型为对象：键为本次响应实际引用的文件标识，值为后端调用 CloudBase getTempFileURL 取得的 HTTPS 临时访问地址。列表只处理本页封面，详情和材料查询只处理本次返回的图片；不得接受客户端指定任意文件并签名的公共入口。</p><pre id=\"doxcndfadPLZ5upe8MeUzJH2vgc\" caption=\"图片映射结构&#xA;\" lang=\"json\" wrap=\"false\"><code>{<br/>  \"image_urls\": {<br/>    \"本次响应中的实际 cloud:// 文件标识\": \"CloudBase SDK 返回的临时 HTTPS 地址\"<br/>  }<br/>}</code></pre><p id=\"doxcnk6Zh3KtgH1f7g5WZx8QAVc\">临时地址有效期为 3600 秒。前端根据文件标识在 image_urls 中取图，地址失效时重新读取对应目录接口，不自行拼接云存储域名。部分图片签名失败时，对应键缺省并由后端记录非敏感异常摘要；图片不存在或临时地址无法加载时，前端显示“图片暂不可用”，保留其余商品资料，不把失败当作上传成功。</p><p id=\"doxcnqIC2HDkbAL8nbHuFTkO9re\">图片地址解析在数据库事务之外进行。存储权限由平台规则限制上传账号，商品保存仍由可信 UID 与 admin_allowlist 校验；业务管理员白名单不自动赋予云存储写权限，新增商家账号时需同步核对。其他非目录文件继续按原私有权限处理。</p><p id=\"doxcnjIgXTHhhYlvjqJkKrh0Xdb\">官方依据：<a href=\"https://docs.cloudbase.net/storage/sdk\">CloudBase SDK 管理文件：uploadFile 与 getTempFileURL</a>；<a href=\"https://github.com/TencentCloudBase/node-sdk\">CloudBase Node SDK 官方仓库</a>；<a href=\"https://docs.cloudbase.net/rule/learn-rules\">CloudBase 存储路径与身份安全规则</a>。</p></fragment>",
+      "document_id": "KpjZdOhP9oNW4cxqjOecVgBJnzh",
+      "revision_id": 847
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.96",
+      "latest": "1.0.98",
+      "message": "lark-cli 1.0.98 available, current 1.0.96, run: lark-cli update"
+    }
+  }
+}

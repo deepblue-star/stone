@@ -1,0 +1,101 @@
+<view class="catalog-screen"
+  ><navigation-bar
+    title="商品详情"
+    back="{{true}}"
+    color="#20372f"
+    background="#f7f6f2"
+  /><scroll-view class="catalog-scroll" scroll-y type="list">
+    <view wx:if="{{loading}}" class="catalog-empty">正在读取商品详情…</view
+    ><view wx:elif="{{error}}" class="catalog-message error"
+      ><text>{{error}}</text><button bindtap="load">重新读取</button></view
+    >
+    <view wx:elif="{{item}}"
+      ><view
+        class="detail-photo"
+        bindtap="previewImage"
+        aria-role="button"
+        aria-label="查看商品大图"
+        ><image
+          wx:if="{{coverUrl}}"
+          src="{{coverUrl}}"
+          mode="aspectFill"
+          binderror="coverError"
+        /><view wx:else class="detail-placeholder">图片暂不可用</view
+        ><text wx:if="{{coverUrl}}" class="photo-hint">点击查看大图</text></view
+      >
+      <view class="product-content"
+        ><view class="detail-price"><text>¥</text>{{priceText||'—'}}</view
+        ><view class="detail-name">{{item.name}}</view
+        ><view class="detail-stock">{{stockText}}</view>
+        <view class="spec-section"
+          ><view class="section-label">选择规格</view
+          ><view wx:if="{{!dimensions.length}}" class="default-spec"
+            >默认规格</view
+          ><view
+            wx:for="{{dimensions}}"
+            wx:for-item="dimension"
+            wx:key="key"
+            class="spec-dimension"
+            ><view class="dimension-name">{{dimension.label}}</view
+            ><view class="spec-options"
+              ><button
+                wx:for="{{dimension.options}}"
+                wx:for-item="option"
+                wx:key="value"
+                data-key="{{dimension.key}}"
+                data-value="{{option.value}}"
+                bindtap="chooseOption"
+                disabled="{{!option.available&&!option.selected}}"
+                class="spec-chip {{option.selected?'selected':''}}"
+                aria-label="{{dimension.label}}，{{option.label}}{{!option.available?'，缺货或组合不可用':''}}"
+              >
+                {{option.label}}<text
+                  wx:if="{{!option.available&&!option.selected}}"
+                >
+                  · 不可选</text
+                >
+              </button></view
+            ></view
+          ><view class="catalog-caption"
+            >点击已选规格可以取消，再选择其他组合。</view
+          ></view
+        >
+        <view class="quantity-row"
+          ><view
+            ><view class="section-label">购买数量</view
+            ><view class="catalog-caption">按当前所选 SKU 计算</view></view
+          ><view class="quantity-controls"
+            ><button
+              data-delta="-1"
+              bindtap="quantityChange"
+              disabled="{{!sku||quantity<=1}}"
+              aria-label="减少数量"
+            >
+              −</button
+            ><text>{{quantity}}</text
+            ><button
+              data-delta="1"
+              bindtap="quantityChange"
+              disabled="{{!sku||quantity>=sku.available_stock}}"
+              aria-label="增加数量"
+            >
+              ＋
+            </button></view
+          ></view
+        >
+        <view class="description-section"
+          ><view class="section-label">商品说明</view
+          ><view class="description-body"
+            >{{item.description||'商家尚未填写详细说明。'}}</view
+          ></view
+        >
+        <view class="purchase-note"
+          ><view>小计：¥{{totalText}}</view
+          ><view class="catalog-caption"
+            >展示价格仅供选购参考，下单时以后端核价为准。</view
+          ><button bindtap="showPurchaseStatus">购买功能尚未开放</button></view
+        ></view
+      ></view
+    >
+  </scroll-view></view
+>

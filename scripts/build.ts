@@ -11,3 +11,4 @@ await build({
   bundle:true, platform:'neutral', format:'cjs', target:'es2018', sourcemap:false,
 });
 console.log('Built business-api and shared Mini Program request client');
+await build({entryPoints:['packages/contracts/src/catalog-selection.ts'],outfile:'miniprogram/services/catalog-selection.js',bundle:true,platform:'neutral',format:'cjs',target:'es2018',sourcemap:false});

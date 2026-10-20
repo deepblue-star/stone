@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcnpiTKsh3VulFzw9GWztlN7g\"><h3 id=\"doxcnpiTKsh3VulFzw9GWztlN7g\" seq=\"auto\" seq-marker=\"3.2.2\">珠子、配件与库存管理</h3><h4 id=\"doxcnKsJXmLzQvff3kzTuwATONb\" seq=\"auto\" seq-marker=\"3.2.2.1\">业务功能</h4><p id=\"doxcntE1uvlcFsWutPBShWDsrSV\">管理员维护珠子和配件的分类、图片、名称、材质、尺寸、单价、库存及上下架状态。不同尺寸作为独立 SKU 管理，这些数据直接供用户 DIY 面板使用。</p><h4 id=\"doxcnJEb3dh3k1cI24DrJP3yz4f\" seq=\"auto\" seq-marker=\"3.2.2.2\">技术实现</h4><p id=\"doxcnaethrLKDnC0Ru5sdGBDLYe\">CloudBase MySQL 保存分类、SKU、价格与库存，图片存入云存储。<b>实现难点：</b>价格或库存更新后，新设计应读取新值；已下单设计继续使用订单快照。</p></fragment>",
+      "document_id": "UZV7dBTFroLwMPx0ik6cVCjDnfd",
+      "revision_id": 733
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.96",
+      "latest": "1.0.98",
+      "message": "lark-cli 1.0.98 available, current 1.0.96, run: lark-cli update"
+    }
+  }
+}

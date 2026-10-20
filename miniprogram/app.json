@@ -1,5 +1,8 @@
 {
   "pages": [
+    "pages/catalog/index",
+    "pages/product/index",
+    "pages/materials/index",
     "pages/foundation/index",
     "pages/index/index",
     "pages/logs/logs"

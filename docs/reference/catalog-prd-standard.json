@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcnGvrX2LrNA8OFfA9N5TgKZf\"><h3 id=\"doxcnGvrX2LrNA8OFfA9N5TgKZf\" seq=\"auto\" seq-marker=\"3.1.4\">标准商品商城</h3><h4 id=\"doxcngBFCFKDSeCCDTdtQgT5lfe\" seq=\"auto\" seq-marker=\"3.1.4.1\">业务功能</h4><grid id=\"doxcnOIXlPsQH2ZpuoCuzyR7D4c\"><column id=\"doxcn7pv4MT3vpIMRUlPioJWPeg\" width-ratio=\"0.200000\"><p id=\"doxcnL9hLZVYjHFvN1jR5iPLwOc\">用户从首页“好物”或底部好物入口进入商城，按分类浏览或搜索商品。在商品详情查看图片、说明、规格与价格，选择数量后加入购物车或立即购买。</p></column><column id=\"doxcnDlk1et5k6qf7t3AEGWS0Ab\" width-ratio=\"0.200000\"><img id=\"doxcn7dC6UqVecfe4GRut2HXkFe\" name=\"image.png\" caption=\"tab2入口&#xA;\" mime=\"image/jpeg\" scale=\"1.000000\" src=\"FgSCbZcmgo3288xshH0cLpP7n4b\"/></column><column id=\"doxcnNqQymeRRFs70x9shkpVKWe\" width-ratio=\"0.200000\"><img id=\"doxcn48LbxQDSrD02ye8vO8Vcch\" name=\"03-discount-products.png\" caption=\"对标标准商品列表&#xA;\" mime=\"image/jpeg\" scale=\"0.162963\" src=\"EdIBbI3j8oF8Fyxna73cBOFKnEb\"/></column><column id=\"doxcno3LhgkUnFoEnlQeycovkAf\" width-ratio=\"0.200000\"><img id=\"doxcnl8xMulOStwLrB2tTvNE1gb\" name=\"product-annotated.png\" caption=\"对标商品详情：规格、客服、购物车与立即购买&#xA;\" mime=\"image/jpeg\" scale=\"0.191286\" src=\"RvtzbJdeNo1ICfxQr8QczlMan2c\"/></column><column id=\"doxcnIYXtjPXLq8fdjOXkCfmlZe\" width-ratio=\"0.200000\"><img id=\"doxcnq5mrXvJs1o6zP1xZDDyLAf\" name=\"image.png\" caption=\"对标商品详情：详情描述、费用明细、收货地址（这个可以去掉）&#xA;\" mime=\"image/jpeg\" scale=\"1.000000\" src=\"IGFub7dJwoor97xAwCGc9RFOnKb\"/></column></grid><h4 id=\"doxcnNxdnhVHygy9uaW8owK8Ize\" seq=\"auto\" seq-marker=\"3.1.4.2\">技术实现</h4><p id=\"doxcnmL9mjt6sQlpGH4nbCk8txU\">分类、商品详情和规格 SKU 由同一商品数据提供；下单时记录商品与价格快照。<b>实现难点：</b>规格切换、库存和价格在列表、详情与结算环节保持一致。</p></fragment>",
+      "document_id": "UZV7dBTFroLwMPx0ik6cVCjDnfd",
+      "revision_id": 732
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.96",
+      "latest": "1.0.98",
+      "message": "lark-cli 1.0.98 available, current 1.0.96, run: lark-cli update"
+    }
+  }
+}

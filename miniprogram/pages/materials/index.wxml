@@ -1,0 +1,70 @@
+<view class="catalog-screen"
+  ><navigation-bar
+    title="材料目录"
+    back="{{true}}"
+    color="#20372f"
+    background="#f7f6f2"
+  /><view class="material-switch"
+    ><button
+      class="{{catalogType==='BEAD'?'selected':''}}"
+      data-type="BEAD"
+      bindtap="changeType"
+    >
+      珠子</button
+    ><button
+      class="{{catalogType==='ACCESSORY'?'selected':''}}"
+      data-type="ACCESSORY"
+      bindtap="changeType"
+    >
+      配件
+    </button></view
+  ><scroll-view scroll-y type="list" class="catalog-scroll"
+    ><view class="material-note"
+      >查看真实材料规格、单价和库存。DIY 画布将在后续模块接入。</view
+    >
+    <view wx:if="{{error}}" class="catalog-message error"
+      ><text>{{error}}</text><button bindtap="load">重新读取</button></view
+    ><view wx:if="{{loading}}" class="catalog-empty">正在读取材料…</view>
+    <scroll-view class="material-categories" scroll-x
+      ><view class="material-tabs"
+        ><button
+          wx:for="{{categories}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="chooseCategory"
+          class="{{categoryId===item.id?'selected':''}}"
+        >
+          {{item.name}}
+        </button></view
+      ></scroll-view
+    >
+    <view wx:if="{{!loading&&!items.length&&!error}}" class="catalog-empty"
+      ><view class="empty-title">暂无可展示的材料</view
+      ><view>商家完成分类、材料和规格维护后，会在这里展示。</view></view
+    >
+    <view wx:for="{{items}}" wx:key="id" class="material-item"
+      ><view class="material-name">{{item.name}}</view
+      ><view class="material-skus"
+        ><view
+          wx:for="{{item.skus}}"
+          wx:for-item="sku"
+          wx:key="id"
+          class="material-sku {{!sku.available?'unavailable':''}}"
+          ><image
+            wx:if="{{sku.url}}"
+            src="{{sku.url}}"
+            mode="aspectFill"
+            lazy-load
+          /><view wx:else class="material-photo-empty">暂无图片</view
+          ><view class="material-sku-info"
+            ><view>{{sku.diameter_mm?sku.diameter_mm+' mm':'规格未注明'}}</view
+            ><view class="material-price">¥{{sku.priceText}} / 件</view
+            ><text class="material-stock"
+              >{{sku.stockText}}</text
+            ></view
+          ></view
+        ></view
+      ></view
+    >
+  </scroll-view></view
+>

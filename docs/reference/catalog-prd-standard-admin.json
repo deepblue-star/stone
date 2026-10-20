@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcno8a41zaFg2v2Jx8KbGm1ff\"><h3 id=\"doxcno8a41zaFg2v2Jx8KbGm1ff\" seq=\"auto\" seq-marker=\"3.2.3\">标准商品管理</h3><h4 id=\"doxcn4UEbBM6GVfym933dP9Myvd\" seq=\"auto\" seq-marker=\"3.2.3.1\">业务功能</h4><p id=\"doxcnhuK5nHmmjqnuGQ2j3to1Ma\">管理员维护好物商城的商品分类、列表信息、详情图片、规格、价格、库存和上下架状态。</p><h4 id=\"doxcnD3CiOrkJq0ympz0Ey873pe\" seq=\"auto\" seq-marker=\"3.2.3.2\">技术实现</h4><p id=\"doxcnT6tgBWcZNGUFsRolDZH5jd\">商品与规格 SKU 关联，商品列表和详情共用同一可售数据。<b>实现难点：</b>多规格库存和价格要与用户选择的具体 SKU 对应。</p></fragment>",
+      "document_id": "UZV7dBTFroLwMPx0ik6cVCjDnfd",
+      "revision_id": 732
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.96",
+      "latest": "1.0.98",
+      "message": "lark-cli 1.0.98 available, current 1.0.96, run: lark-cli update"
+    }
+  }
+}

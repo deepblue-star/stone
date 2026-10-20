@@ -3,7 +3,8 @@ export type EntityId = string;
 export type IsoDateTime = string;
 export const PUBLIC_CODES = ['OK', 'INVALID_ARGUMENT', 'UNAUTHORIZED', 'FORBIDDEN', 'NOT_FOUND', 'CONFLICT', 'INTERNAL_ERROR'] as const;
 export type PublicCode = typeof PUBLIC_CODES[number];
-export type ErrorCode = Exclude<PublicCode, 'OK'> | 'CONFIG_INVALID';
+export type ErrorCode = Exclude<PublicCode, 'OK'> | 'CONFIG_INVALID' | import('./catalog').CatalogErrorCode;
+export * from './catalog';
 export type Response<T> =
   | { ok: true; code: 'OK'; message: string; data: T; request_id: string }
   | { ok: false; code: ErrorCode; message: string; data: null; request_id: string };

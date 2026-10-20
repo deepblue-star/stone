@@ -12,4 +12,5 @@ cloudfunctions/*/index.js
 cloudfunctions/*/node_modules/
 admin-web/dist/
 miniprogram/services/client.js
+miniprogram/services/catalog-selection.js
 .worktrees/

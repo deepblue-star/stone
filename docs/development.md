@@ -48,7 +48,13 @@
 
 ## 接口与身份
 
-本轮仅实现方案中的 `getPublicSiteConfig` 和 `getSiteConfig`。未实现的业务 action 不注册，不返回虚假的成功。
+基础底座最初实现 `getPublicSiteConfig` 和 `getSiteConfig`。商品目录模块的本地代码已增加 16 个目录/库存 action：管理员分类、商品、SKU 查询保存和逻辑删除、SKU 下架影响预览、库存调整及流水，用户端标准分类、商品列表、详情与 DIY 材料读取。仅注册实际已实现 action，不返回虚假的成功。
+
+商品目录模块当前仍待开发环境部署确认及真实联调，线上商家端预览暂未更新。不要把本地代码已实现视为线上已发布；最新状态见 docs/progress/catalog.md。
+
+管理端目录路由为 `#/catalog`，基础联通页仍为 `#/`。小程序从 `pages/catalog/index` 展示标准商品，`pages/product/index` 展示规格详情，`pages/materials/index` 是只读材料目录，`pages/foundation/index` 保留联通检查。当前商品阶段没有购物车、支付或 DIY 画布，不模拟其成功结果。
+
+私有商品图由管理端 SDK 上传至 `catalog/`，存储仍为 PRIVATE。目录查询仅对本次数据库返回的图片生成 `image_urls` 临时地址，不签任意客户端文件。技术方案 4.7.5 固定此约定；图片文件引用不保存临时地址。样例图片与提示词见 assets/samples/README.md，均为虚构开发素材。
 
 小程序通过 wx.cloud.callFunction 调用，公共客户端读取 res.result；Web 使用 CloudBase SDK callFunction。两端统一处理业务失败、平台调用失败、请求标识和请求期间禁用。
 
@@ -68,7 +74,7 @@
 
 事务测试有明确 fixture 前缀，清理条件只指向该轮测试创建的数据。跳过的真实事务测试会在报告中显示 skipped，不计为通过。
 
-真机扫码、有效商家账号登录和第二位开发者电脑启动均需要实际操作后才能勾选完成。
+基础底座商家账号登录已由用户确认，小程序模拟器联通已实际验证；新目录模块仍需单独完成真实浏览器/云端操作和模拟器验收。真机与第二位开发者电脑启动仍待实际操作，不能以组件测试或触发编译代替。
 
 ## 当前依赖限制
 

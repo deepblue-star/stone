@@ -23,7 +23,7 @@
 | 云函数原生 MySQL 连接 | 已验证 | business-api 云端查询成功；临时云端验证器完成真实多表事务 |
 | 20 张业务表与变更脚本 | 已验证 | 20 表结构核对通过；重复迁移 SKIP；另有 1 张迁移基础设施表 |
 | business-api 与统一协议 | 已实现并部署 | 仅开放 getPublicSiteConfig 和 getSiteConfig；协议、身份与日志测试通过 |
-| 小程序与管理端公共层 | 已实现，部分运行验收待完成 | 小程序模拟器实调通过；开发商家账号 SDK 登录及受保护接口通过，见 016；管理端浏览器成功登录界面仍待人工确认 |
+| 小程序与管理端公共层 | 联通及登录已验证 | 小程序模拟器实调通过；开发商家账号 SDK 登录及受保护接口通过；用户确认浏览器登录成功，见 017 |
 | 自动测试与真实云端验证 | 已执行 | 68 项单测；真实结构检查；云端事务 8 项检查通过，详见下方证据 |
 | 真机与第二台电脑 | 未验证 | 需要人工扫码和第二位开发者实际运行 |
 
@@ -179,3 +179,9 @@
 - 当前浏览器控制连接超时，未反复重试。改用已安装 @cloudbase/js-sdk 的 Node 条件入口验证同一 signInWithPassword/getSession/callFunction 流程：真实非匿名会话成功，受保护 getSiteConfig 返回 ok=true，request_id=dcd0c5ce-ccb1-11f1-acda-525400e4cc6c。随后退出验证会话，未保存 token。
 - 此项确认账号、密码及后端白名单有效，不等同于管理端浏览器表单全链路验收；可由用户在当前商家端登录确认。
 - 官方依据：https://docs.cloudbase.net/api-reference/manager/node/user；https://docs.cloudbase.net/api-reference/webv3/authentication#signinwithpassword；CLI 3.8.6 user create/list 帮助。
+
+### 017 — 用户确认商家端浏览器登录成功
+
+- 2026-10-21，用户反馈“登陆进去ok的”，确认已使用开发商家账号在管理端页面成功登录。
+- 验收依据为用户实际操作反馈，结合 016 的 SDK 登录与受保护接口实调；不是重新声称浏览器自动化成功。
+- 管理端浏览器登录不再列为待验收项。真机、第二台电脑、远程 CI 结果和 SDK 传递依赖审查仍按各自状态保留，未扩大为 Alpha 全业务完成。
