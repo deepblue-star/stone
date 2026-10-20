@@ -114,10 +114,10 @@ stone/
 **Files:** `docs/verification/foundation.md`、`docs/development.md`。
 
 - [x] 汇总 `npm run typecheck`、`npm run build`、`npm run test:unit`、`npm run test:integration`、`npm run db:verify` 的实际结果。
-- [ ] 记录技术方案版本、Git 版本、数据库版本、EnvId、实际部署函数、真实请求 ID 和验证时间。
+- [x] 记录技术方案版本、Git 版本、数据库版本、EnvId、实际部署函数、真实请求 ID 和验证时间。
 - [ ] 展示结构校验结果、事务提交与回滚证据、小程序实调和管理端登录权限结果。
 - [x] 用状态分别标记通过、失败、未验证；真机和第二台电脑未实测时不能标为通过。
-- [ ] 列出人工操作和剩余问题；代码审查通过后将工作提交至仓库，保留可恢复的变更历史。
+- [x] 列出人工操作和剩余问题；代码审查通过后将工作提交至仓库，保留可恢复的变更历史。
 
 ## 验收矩阵
 
