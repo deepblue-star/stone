@@ -1,0 +1,17 @@
+{
+  "envId": "stone-d3gga4t2g2ffaedb6",
+  "functionRoot": "cloudfunctions",
+  "functions": [
+    {
+      "name": "business-api",
+      "handler": "index.main",
+      "type": "Event",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "envVariables": { "STONE_ENV_ID": "stone-d3gga4t2g2ffaedb6" },
+      "vpc": { "vpcId": "vpc-ccub4hho", "subnetId": "subnet-lgb8m35p" },
+      "installDependency": true
+    }
+  ]
+}

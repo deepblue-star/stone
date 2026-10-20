@@ -1,0 +1,39 @@
+{
+  "name": "stone",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit && vue-tsc --noEmit -p admin-web/tsconfig.json",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test": "npm run test:unit",
+    "build": "tsx scripts/build.ts && vite build --config admin-web/vite.config.ts",
+    "dev:admin": "vite --config admin-web/vite.config.ts",
+    "db:migrate": "tsx scripts/db-migrate.ts",
+    "db:verify": "tsx scripts/db-verify.ts",
+    "deploy:dev": "npm run build && tsx scripts/deploy-dev.ts",
+    "db:seed:dev": "tsx scripts/db-seed-dev.ts"
+  },
+  "dependencies": {
+    "@cloudbase/js-sdk": "^3.10.3",
+    "@cloudbase/node-sdk": "^3.18.7",
+    "mysql2": "^3.24.6",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0",
+    "wx-server-sdk": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5",
+    "vue-tsc": "^3.3.13"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+project.private.config.json
+*.log
+.cloudbase/
+.local/
+cloudfunctions/*/index.js
+cloudfunctions/*/node_modules/
+admin-web/dist/
+miniprogram/services/client.js
+.worktrees/

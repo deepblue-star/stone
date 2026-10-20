@@ -1,0 +1,10 @@
+<view class="page">
+  <text class="eyebrow">STONE / DEVELOPMENT</text>
+  <view class="title">基础服务联通</view>
+  <view class="description">读取真实云函数和数据库中的公开配置。</view>
+  <button bindtap="checkConnection" loading="{{loading}}" disabled="{{loading}}">{{loading ? '正在检查' : '检查连接'}}</button>
+  <view wx:if="error" class="error">{{error}}</view>
+  <view wx:if="checked" class="results"><view class="success">公开配置读取成功</view><view>Banner：{{bannerCount}} 条</view><view>客服：{{customerService}}</view><view>功能入口：{{entryCount}} 项</view></view>
+  <view wx:if="requestId" class="request-id">请求标识：{{requestId}}</view>
+  <view class="note">此页仅用于开发验收，正式业务页面在对应模块中实现。</view>
+</view>
