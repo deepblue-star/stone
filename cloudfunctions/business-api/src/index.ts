@@ -11,6 +11,7 @@ import { UnitOfWork } from '../../../packages/backend/src/db/unit-of-work';
 import { createCatalogDaos } from '../../../packages/backend/src/catalog/dao';
 import { PageTokens } from '../../../packages/backend/src/catalog/rules';
 import { CloudCatalogFiles } from '../../../packages/backend/src/catalog/storage';
+import { CatalogNodeStorage } from '../../../packages/backend/src/catalog/node-storage';
 import { AdminCatalogService } from '../../../packages/backend/src/services/admin-catalog-service';
 import { CatalogService } from '../../../packages/backend/src/services/catalog-service';
 import { InventoryService } from '../../../packages/backend/src/services/inventory-service';
@@ -35,7 +36,8 @@ const tokens = new PageTokens(() => {
   if (!process.env.MYSQL_PASSWORD) throw new Error('Missing catalog cursor signing configuration');
   return createHmac('sha256', process.env.MYSQL_PASSWORD).update('stone:catalog:page-token:v1').digest('hex');
 });
-const catalogFiles = new CloudCatalogFiles(() => process.env.STONE_ENV_ID ?? '', () => getRuntime().cloudbase);
+const catalogStorage=new CatalogNodeStorage(()=>getRuntime().cloudbase);
+const catalogFiles = new CloudCatalogFiles(() => process.env.STONE_ENV_ID ?? '', () => catalogStorage);
 const api = createBusinessApi({
   siteConfigService: service,
   catalogServices: {

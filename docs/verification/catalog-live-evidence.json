@@ -1,0 +1,197 @@
+{
+  "runId": "6b66dda8-7750-467d-9d27-06b53d2d2d32",
+  "marker": "catalog_live_6b66dda87750467d9d2706b53d2d2d32",
+  "checks": {
+    "demoImagesAndTwoSkus": true,
+    "publicListing": true,
+    "concurrentSpecUnique": true,
+    "concurrentInventoryIdempotency": true,
+    "reservationGuards": true,
+    "staleImpactRejected": true,
+    "realRefundRollback": true,
+    "refundAndReplay": true,
+    "logicalDeletion": true
+  },
+  "fixtures": {
+    "demo_category_id": "1",
+    "demo_item_id": "2",
+    "duplicate_item_id": "3",
+    "duplicate_sku_id": "3",
+    "bead_category_id": "2",
+    "bead_item_id": "4",
+    "bead_sku_id": "4",
+    "account_id": "7"
+  },
+  "evidence": [
+    {
+      "action": "listAdminCategories",
+      "code": "OK",
+      "requestId": "3e58732c-ccee-11f1-8852-525400a9be57"
+    },
+    {
+      "action": "listAdminItems",
+      "code": "OK",
+      "requestId": "3f71cbc1-ccee-11f1-83f9-525400de3930"
+    },
+    {
+      "action": "getStandardItemDetail",
+      "code": "OK",
+      "requestId": "3f827a41-ccee-11f1-9387-5254005dc47f"
+    },
+    {
+      "action": "listStandardItems",
+      "code": "OK",
+      "requestId": "3fbaba91-ccee-11f1-b743-52540059feef"
+    },
+    {
+      "action": "saveCatalogItem",
+      "code": "OK",
+      "requestId": "3fe4978f-ccee-11f1-8ba2-525400ab2e2a"
+    },
+    {
+      "action": "saveCatalogSku-concurrent",
+      "code": "OK",
+      "requestId": "40055c3d-ccee-11f1-8ced-525400c6cd80"
+    },
+    {
+      "action": "saveCatalogSku-concurrent",
+      "code": "SKU_SPEC_ALREADY_EXISTS",
+      "requestId": "400ac414-ccee-11f1-872b-525400655719"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "401de52b-ccee-11f1-ba0a-5254008bd148"
+    },
+    {
+      "action": "deleteCatalogSku",
+      "code": "OK",
+      "requestId": "402e9e34-ccee-11f1-9387-5254005dc47f"
+    },
+    {
+      "action": "deleteCatalogItem",
+      "code": "OK",
+      "requestId": "403f5aed-ccee-11f1-8ced-525400c6cd80"
+    },
+    {
+      "action": "saveCategory",
+      "code": "OK",
+      "requestId": "404e2e1a-ccee-11f1-9387-5254005dc47f"
+    },
+    {
+      "action": "saveCatalogItem",
+      "code": "OK",
+      "requestId": "405a61cb-ccee-11f1-bc20-5254000956fc"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "OK",
+      "requestId": "40675f92-ccee-11f1-9790-525400c50ece"
+    },
+    {
+      "action": "adjustInventory",
+      "code": "OK",
+      "requestId": "40733787-ccee-11f1-a3ed-5254007594e6"
+    },
+    {
+      "action": "adjustInventory",
+      "code": "OK",
+      "requestId": "4074e32c-ccee-11f1-b134-52540093365b"
+    },
+    {
+      "action": "adjustInventory",
+      "code": "CONFLICT",
+      "requestId": "428623df-ccee-11f1-acda-525400e4cc6c"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "44ed000c-ccee-11f1-9cbc-525400694506"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "SKU_HAS_PENDING_ORDERS",
+      "requestId": "4505a29d-ccee-11f1-9cbc-525400694506"
+    },
+    {
+      "action": "saveCategory",
+      "code": "SKU_HAS_PENDING_ORDERS",
+      "requestId": "45179a36-ccee-11f1-872b-525400655719"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "4a4cc8cf-ccee-11f1-acda-525400e4cc6c"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "SKU_DEACTIVATION_IMPACT_CHANGED",
+      "requestId": "4b5eb889-ccee-11f1-ba00-5254002608d6"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "4b6dbefb-ccee-11f1-acda-525400e4cc6c"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "SKU_COUPON_STATE_CONFLICT",
+      "requestId": "4d761ffd-ccee-11f1-8ced-525400c6cd80"
+    },
+    {
+      "action": "getAdminCatalogItem",
+      "code": "OK",
+      "requestId": "85353087-ccee-11f1-bc20-5254000956fc"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "866a68fb-ccee-11f1-9a64-5254003b20ed"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "SKU_COUPON_STATE_CONFLICT",
+      "requestId": "877414cb-ccee-11f1-a3ed-5254007594e6"
+    },
+    {
+      "action": "getAdminCatalogItem",
+      "code": "OK",
+      "requestId": "8ac3172e-ccee-11f1-8852-525400a9be57"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "OK",
+      "requestId": "8bd36ad0-ccee-11f1-9790-525400c50ece"
+    },
+    {
+      "action": "saveCatalogSku",
+      "code": "OK",
+      "requestId": "8be93c13-ccee-11f1-ba0a-5254008bd148"
+    },
+    {
+      "action": "previewSkuDeactivation",
+      "code": "OK",
+      "requestId": "8f08c55a-ccee-11f1-9387-5254005dc47f"
+    },
+    {
+      "action": "deleteCatalogSku",
+      "code": "OK",
+      "requestId": "8f17adfa-ccee-11f1-8ced-525400c6cd80"
+    },
+    {
+      "action": "deleteCatalogSku",
+      "code": "OK",
+      "requestId": "8f2aa29a-ccee-11f1-872b-525400655719"
+    },
+    {
+      "action": "deleteCatalogItem",
+      "code": "OK",
+      "requestId": "8f3c5ded-ccee-11f1-8ced-525400c6cd80"
+    },
+    {
+      "action": "deleteCategory",
+      "code": "OK",
+      "requestId": "8f4b037c-ccee-11f1-b134-52540093365b"
+    }
+  ]
+}

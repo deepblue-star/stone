@@ -1,11 +1,18 @@
 import { describe, expect, it, vi } from 'vitest';
 import { CloudCatalogFiles } from '../../packages/backend/src/catalog/storage';
 describe('catalog storage references', () => {
+  it('reports only bounded metadata diagnostics to the authorized caller', async()=>{
+    const id='cloud://environment.bucket/catalog/test.png';
+    const client={getFileInfo:vi.fn(async()=>({fileList:[{fileID:id,code:'FETCH_FILE_INFO_ERROR',mime:'',size:0}]})),getTempFileURL:vi.fn(async()=>({fileList:[]}))};
+    const storage=new CloudCatalogFiles(()=>'environment',()=>client);
+    await expect(storage.assertCanReference([id],{kind:'web',uid:'admin'})).rejects.toThrow('FETCH_FILE_INFO_ERROR');
+  });
   it('validates existing uploaded images using SDK metadata before save', async () => {
     const id = 'cloud://environment.bucket/catalog/image.png';
     const client = { getFileInfo: vi.fn(async () => ({ fileList: [{ fileID: id, code: 'SUCCESS', mime: 'image/png', size: 1024 }] })), getTempFileURL: vi.fn(async () => ({ fileList: [] })) };
     const storage = new CloudCatalogFiles(() => 'environment', () => client);
     await expect(storage.assertCanReference([id], { kind: 'web', uid: 'admin' })).resolves.toBeUndefined();
+    expect(client.getFileInfo).toHaveBeenCalledWith({fileList:[{fileID:id,maxAge:60,urlType:'COS_URL'}]});
     client.getFileInfo.mockResolvedValue({ fileList: [{ fileID: id, code: 'SUCCESS', mime: 'application/xml', size: 512 }] });
     await expect(storage.assertCanReference([id], { kind: 'web', uid: 'admin' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
   });
