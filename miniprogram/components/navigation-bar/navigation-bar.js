@@ -60,17 +60,22 @@ Component({
   lifetimes: {
     attached() {
       const rect = wx.getMenuButtonBoundingClientRect()
-      wx.getSystemInfo({
-        success: (res) => {
-          const isAndroid = res.platform === 'android'
-          const isDevtools = res.platform === 'devtools'
-          this.setData({
-            ios: !isAndroid,
-            innerPaddingRight: `padding-right: ${res.windowWidth - rect.left}px`,
-            leftWidth: `width: ${res.windowWidth - rect.left }px`,
-            safeAreaTop: isDevtools || isAndroid ? `height: calc(var(--height) + ${res.safeArea.top}px); padding-top: ${res.safeArea.top}px` : ``
-          })
-        }
+      const windowInfo = wx.getWindowInfo()
+      const { platform } = wx.getDeviceInfo()
+      const isAndroid = platform === 'android'
+      const isDevtools = platform === 'devtools'
+      // Some devices do not report safeArea; statusBarHeight is the fallback.
+      const safeTop = windowInfo.safeArea && Number.isFinite(windowInfo.safeArea.top)
+        ? Math.max(0, windowInfo.safeArea.top)
+        : Math.max(0, windowInfo.statusBarHeight || 0)
+      const sideWidth = Math.max(0, windowInfo.windowWidth - rect.left)
+      this.setData({
+        ios: !isAndroid,
+        innerPaddingRight: `padding-right: ${sideWidth}px`,
+        leftWidth: `width: ${sideWidth}px`,
+        safeAreaTop: isDevtools || isAndroid
+          ? `height: calc(var(--height) + ${safeTop}px); padding-top: ${safeTop}px`
+          : ''
       })
     },
   },

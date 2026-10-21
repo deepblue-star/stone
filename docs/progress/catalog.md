@@ -12,7 +12,8 @@
 - [x] 管理端目录与素材操作、真实浏览器联调。
 - [x] 小程序商品及材料展示代码、模板编译；运行验收另列。
 - [x] 云端业务事务联调及商家端 375/768/1440 布局检查。
-- [ ] 小程序目录运行/真机、第二位开发者机器验收。
+- [x] 小程序目录/商品详情模拟器读取、规格/数量交互和当前布局验收。
+- [ ] 小程序真机、材料页面完整交互、第二位开发者机器验收。
 - [x] 最终实现与验证记录提交推送（提交号见 Git 历史）。
 
 ## 001 — 开发边界
@@ -95,3 +96,29 @@
 ## 011 — 交付检查点
 
 后续人工确认目录页面的模拟器/真机运行，并在第二位开发者机器拉起项目。本轮实现、兼容修复与脱敏证据随 feat/foundation 提交推送；不合并 main、不创建 PR，不纳入用户原有 README 删除。详细结果与边界以 ../verification/catalog.md 为准。
+
+## 012 — 用户小程序日志诊断（待确认修复）
+
+- 用户提供基础库 3.17.4、工具 2.02.2608212 的日志。确认共享 catalog.wxss 的 button[disabled]、商品页 .spec-chip[disabled]、联通页 button[disabled] 使用了 Skyline 不支持的属性选择器；模板导航栏包含触发警告的 -webkit-mask/-webkit-mask-size 和旧 wx.getSystemInfo。
+- 官方 app 配置及 Skyline WXSS 文档均列出 tagNameStyleIsolation: legacy 为合法配置，用于 tag 选择器全局匹配；不能把开发者工具的 invalid 提示直接归因为无效字段，不能未经验证删除后改变样式隔离语义。参考：https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html 、https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/skyline/wxss.html 。
+- 官方 glass-easel 迁移文档建议 Skyline 页面同时启用 glassEaselWebview 以兼容回退；当前项目缺此配置。当前 libVersion=trial，对应用户日志中的灰度基础库提示；本轮尚未更改版本或渲染器。
+- wechatide 门禁 equal 0.3.9、已登录、无需访问令牌。共享样式 compile_wxss 返回 success，但这不代表样式在 Skyline 全受支持。
+- 不等待 selector 的截图成功，但画面是开发者工具欢迎页，不是实际商品目录。运行时接口超时；触发 catalog 编译后，等待截图的自动化准备仍超时，不能把成功触发当成运行验收。没有继续循环刷新或声称目录正常。
+- 已向用户确认仅修本地 Skyline 配置/导航样式并补测试，不改 AppID、云环境、渲染器或发布；截至本条未收到答复，业务代码和配置未修改。相关工具异常与项目兼容警告分开处理。
+
+## 013 — 已授权的 Skyline 本地兼容修复
+
+- 用户确认直接修复并验证。已处理属性选择器、返回箭头遮罩、旧设备信息 API 和 safeArea 缺失；启用 glassEaselWebview。核对项目不依赖跨组件 tag 全局匹配后去掉可选 legacy 覆盖，使用默认隔离，不将合法字段误称为官方废弃。
+- 修复期间模拟器能显示商品列表与详情真实数据，截图发现标题挤压、价格分行。查官方文档确认 Skyline Flex 默认 column，为目录、详情和材料的横向容器显式设置 row，并处理标题剩余宽度与商品卡盒模型。
+- 回归测试先观察失败再修复，新增 8 项。最终 143 项单测、类型检查、构建通过；具体边界见 ../verification/skyline.md。
+- 运行验收未完成：临时可见标题标记在 CLI 刷新后不出现，证实画面未加载磁盘最新模板；标记已撤回。已停止继续堆样式修改，只针对编译/文件缓存做了受控清理，未清认证/业务数据、未关闭或丢弃用户编辑器内容。
+- 已请用户手动点击开发者工具“编译”，出现文件冲突则先截图。当前工具的编译 success、空日志和旧版本可展示不能冒充本次修复的最终验收。未部署或发布。
+
+## 014 — 手动编译与重开后模拟器验收
+
+- 用户确认已编译，页面自动化恢复；DOM 证实模板是新版，但价格 display 仍为 block。经用户保存并授权后只关闭/重开 Stone 项目窗口，确认 newopen 后新样式实际为 flex，截图价格同行。
+- 目录材料按钮仍被默认尺寸约束为 184px；依据官方 button 的 size 属性采用 mini，先失败测试再修复，实测 88px，标题和说明的末尾标点不再单独换行。
+- 配置位置纠错：最初在 window 中加入 glassEaselWebview 引发 invalid window 提示；重新读取官方迁移文档完整 JSON 示例，改为与 componentFramework 同级的顶层字段，补回归断言并观察失败后修复。最终 invalid/warning/deprecated 三类过滤均无匹配。
+- 实际点击商品、8/10 mm 规格，验证 128.00/168.00 和库存 2；8 mm 数量增加至 2 时小计 256.00，减少回 1 时减号原生 disabled=true。最终 143 项单测、typecheck、build 通过。
+- 最新截图 skyline-catalog-verified.jpg、skyline-product-verified.jpg 已查看；不使用早期缓存旧图冒充结果。返回箭头视觉正常，但受自定义组件选择器边界影响，真实点击尚未覆盖；一次受控组件调用也未找到组件，未宣称返回操作通过。
+- 未改 AppID/云环境、未退出微信账号、未清本地业务数据、未部署或发布。真机、材料页面完整交互及多设备仍待验收；完整记录见 ../verification/skyline.md。

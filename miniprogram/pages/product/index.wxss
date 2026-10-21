@@ -31,6 +31,9 @@
   padding: 32rpx;
 }
 .detail-price {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
   font-size: 50rpx;
   font-weight: 600;
   color: #285c4d;
@@ -71,6 +74,7 @@
 }
 .spec-options {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 16rpx;
   margin-bottom: 20rpx;
@@ -92,7 +96,7 @@
   background: #e5eee5;
   color: #285c4d;
 }
-.spec-chip[disabled] {
+.spec-chip.is-disabled {
   color: #687369;
   background: #efefe9;
   opacity: 0.75;
@@ -102,6 +106,7 @@
 }
 .quantity-row {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 16rpx;
@@ -111,6 +116,7 @@
 }
 .quantity-controls {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 20rpx;
 }

@@ -6,13 +6,13 @@
     background="#f7f6f2"
   /><scroll-view class="catalog-scroll" scroll-y type="list">
     <view class="catalog-topline"
-      ><view
+      ><view class="catalog-heading"
         ><text class="overline">THE STONE COLLECTION</text
         ><view class="catalog-title">好物，慢慢挑。</view
         ><view class="catalog-subtitle"
           >材质、规格与价格，一目了然。</view
         ></view
-      ><button class="materials-link" bindtap="openMaterials">
+      ><button size="mini" class="materials-link" bindtap="openMaterials">
         材料目录
       </button></view
     >
@@ -32,7 +32,7 @@
     >
     <view wx:if="{{error}}" class="catalog-message error"
       ><text>{{error}}</text
-      ><button bindtap="retry" disabled="{{loading}}">重新读取</button></view
+      ><button class="{{loading?'is-disabled':''}}" bindtap="retry" disabled="{{loading}}">重新读取</button></view
     >
     <view wx:if="{{loading&&!items.length}}" class="catalog-empty"
       >正在为你读取商品…</view
@@ -41,7 +41,7 @@
       ><view class="empty-mark">STONE</view
       ><view class="empty-title">好物正在准备中</view
       ><view>商家上架后，会在这里展示。</view
-      ><button bindtap="load" disabled="{{loading}}">刷新看看</button></view
+      ><button class="{{loading?'is-disabled':''}}" bindtap="load" disabled="{{loading}}">刷新看看</button></view
     >
     <view wx:elif="{{!items.length&&!error}}" class="catalog-empty"
       ><view class="empty-title">这个分类暂时没有商品</view
@@ -83,7 +83,7 @@
     >
     <button
       wx:if="{{nextPage}}"
-      class="catalog-more"
+      class="catalog-more {{loading?'is-disabled':''}}"
       bindtap="loadMore"
       disabled="{{loading}}"
     >

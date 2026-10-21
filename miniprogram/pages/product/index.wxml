@@ -46,7 +46,7 @@
                 data-value="{{option.value}}"
                 bindtap="chooseOption"
                 disabled="{{!option.available&&!option.selected}}"
-                class="spec-chip {{option.selected?'selected':''}}"
+                class="spec-chip {{option.selected?'selected':''}} {{!option.available&&!option.selected?'is-disabled':''}}"
                 aria-label="{{dimension.label}}，{{option.label}}{{!option.available?'，缺货或组合不可用':''}}"
               >
                 {{option.label}}<text
@@ -66,6 +66,7 @@
             ><view class="catalog-caption">按当前所选 SKU 计算</view></view
           ><view class="quantity-controls"
             ><button
+              class="{{!sku||quantity<=1?'is-disabled':''}}"
               data-delta="-1"
               bindtap="quantityChange"
               disabled="{{!sku||quantity<=1}}"
@@ -74,6 +75,7 @@
               −</button
             ><text>{{quantity}}</text
             ><button
+              class="{{!sku||quantity>=sku.available_stock?'is-disabled':''}}"
               data-delta="1"
               bindtap="quantityChange"
               disabled="{{!sku||quantity>=sku.available_stock}}"

@@ -2,9 +2,14 @@
 .catalog-topline {
   padding: 44rpx 32rpx 32rpx;
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16rpx;
+}
+.catalog-heading {
+  flex: 1;
+  min-width: 0;
 }
 .overline {
   font-size: 19rpx;
@@ -25,8 +30,10 @@
   margin-top: 12rpx;
 }
 .materials-link {
+  width: 144rpx;
+  box-sizing: border-box;
   font-size: 24rpx;
-  padding: 16rpx 20rpx;
+  padding: 16rpx 12rpx;
   background: #e8eee7;
   color: #285c4d;
   border-radius: 12rpx;
@@ -40,6 +47,7 @@
 }
 .category-tabs {
   display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
   padding: 8rpx 28rpx;
 }
@@ -60,10 +68,12 @@
 }
 .product-grid {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   padding: 28rpx 20rpx;
 }
 .product-card {
+  box-sizing: border-box;
   width: 50%;
   padding: 0 12rpx 32rpx;
 }
@@ -107,6 +117,9 @@
   min-height: 46rpx;
 }
 .product-price {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
   font-size: 34rpx;
   color: #285c4d;
   margin-top: 12rpx;
