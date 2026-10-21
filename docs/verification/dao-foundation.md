@@ -4,7 +4,7 @@
 
 ## 完成范围
 
-已按确认清单实现 20 个逐主表 DAO，完整工厂共 20 项，旧目录工厂保留八项。只有数据访问能力，不代表 20 个业务模块完成；没有新增对外 action、空 Service、表、前端页面或云端部署。
+已按确认清单实现 20 个逐主表 DAO，完整工厂共 20 项，旧目录工厂保留八项。只有数据访问能力，不代表 20 个业务模块完成；没有新增对外 action、空 Service、表或前端页面。实现检查点之后，已依用户新授权推送并更新开发环境，见下方部署记录。
 
 方法及调用前提见 [DAO 使用约定](../backend/dao.md)，过程见 [开发记录](../progress/dao-foundation.md)。本次只对既有 AdminCatalogService 做必要事件时间传递，使 DAO 不再决定退分事件时间；原有业务顺序不变。
 
@@ -42,3 +42,26 @@
 - 库存流水游标的数值主键比较/排序使用限定列，不被 CAST(id AS CHAR) 的字符串别名遮蔽。只读合成 SELECT 验证了 9/10 在两种排序中的差异，未写入记录。
 
 本轮无 UI、表结构、认证、密钥、商家端部署、小程序发布或在线文档变更。保留现有用户 README 删除，未纳入提交。
+
+## 开发环境推送与部署（2026-10-22）
+
+- 业务代码提交 1c4ab057fae5f7741b5807bc5d9b943ba9282df6 已推送 feat/foundation，包含此前 Skyline 提交。通过远程 ls-remote 核对，不以本地远程跟踪引用代替远端结果。
+- business-api 仅代码更新成功：Active、8298116 字节，平台请求 e8ea384d-45d0-444f-96ab-5a818b5aaf40。原有密钥、VPC、运行时、角色、超时与内存保持一致，没有全量配置覆盖。
+- 构建入口 index.js SHA-256：4E3664B6E8B6236E7805AA095918DFCA24E273B8E29B003ACBFB7A7E21083433。部署前再次执行 typecheck、287 项单测、build 均通过；原有大包告警仍保留。
+- 商家网页无代码/产物变化，不重复部署；小程序改动仅推送源码，未上传体验版或发布正式版。本次没有合并 main、新增业务 action 或执行数据库写入。
+
+实际登录并读取的结果：
+
+| 接口 | 结果 | 请求标识 |
+|---|---|---|
+| getPublicSiteConfig | OK | 01f73528-cd72-11f1-acda-525400e4cc6c |
+| getSiteConfig | OK | 0204459f-cd72-11f1-b743-52540059feef |
+| listAdminCategories | OK | 021290ab-cd72-11f1-8852-525400a9be57 |
+| getAdminCatalogItem | OK | 022150a2-cd72-11f1-9790-525400c50ece |
+| listInventoryMovements | OK | 024f1b09-cd72-11f1-b743-52540059feef |
+| listStandardCategories | OK | 025a081a-cd72-11f1-872b-525400655719 |
+| getStandardItemDetail | OK | 0265b7ee-cd72-11f1-9387-5254005dc47f |
+
+额外图片复查请求 0373cb3d-cd72-11f1-bc20-5254000956fc 返回一张图片/一条映射，单字节 GET 为 206/image/png，完整长度 2272819 字节。没有输出密码、token 或签名 URL。
+
+这轮冒烟只覆盖现有接口的读取与身份链路，并未覆盖所有新 DAO 的真实写入/并发；前述测试边界继续有效。

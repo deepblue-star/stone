@@ -48,3 +48,12 @@
 - 对最终源代码重新导出的 142 次合成调用去重为 131 种 SQL，普通只读 EXPLAIN 最终 131/131 通过。SQL 结构摘要和范围见 ../verification/dao-foundation.md、../verification/dao-sql-evidence.json。
 - 源码无新增 any、AppError/Service/平台 API 引用或 DAO 自建事务；数据库迁移、前端、身份配置及依赖文件没有改动。全量参数/返回说明和 20 类实际方法清单已写到 ../backend/dao.md。
 - 使用 finishing-a-development-branch 保留当前 feat/foundation，完成本地检查点；按用户要求不另行询问合并/发布选项。不合并 main、不创建 PR、不部署、不推送、不丢弃既有 README 删除。
+
+## 006 — 用户授权推送与部署开发环境
+
+- 用户明确要求执行推送及部署。先重新运行 typecheck、287 项单测和 build，均通过；随后将原本未推送的 Skyline 与 DAO 提交一起推到 origin 的 feat/foundation。远程 ls-remote 确认为 1c4ab057fae5f7741b5807bc5d9b943ba9282df6。
+- 采用现有 business-api 仅代码更新，目标 stone-d3gga4t2g2ffaedb6。部署后 Active、代码包 8298116 字节，请求 e8ea384d-45d0-444f-96ab-5a818b5aaf40。更新前后环境变量、VPC、运行时、角色、超时和内存一致；没有迁库、改变凭据、登录策略、权限或套餐。
+- 本地 index.js SHA-256 为 4E3664B6E8B6236E7805AA095918DFCA24E273B8E29B003ACBFB7A7E21083433。商家端构建产物与前次相同，没有重复部署；没有上传/发布小程序正式版。
+- 使用既有商家测试账号通过官方 SDK 登录，7 个实际读取接口返回 OK：公开配置、受保护配置、管理分类、管理商品详情、库存流水、标准分类、标准商品详情。所有读取均指向既有开发样例，没有执行库存调整/退分/建单。
+- 初次冒烟脚本把库存流水响应误写成 items，而契约为 movements；按已有契约修正诊断脚本后 7 项通过，未为使测试通过修改业务代码。只读图片复查返回 206、image/png、完整大小 2272819 字节，未输出临时签名地址。
+- 7 项请求标识及配置核对结果见 ../verification/dao-foundation.md。部署记录单独提交并继续推送同一开发分支；不合并 main、不创建 PR，用户 README 删除仍不纳入。
