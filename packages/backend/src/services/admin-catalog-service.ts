@@ -134,6 +134,7 @@ export class AdminCatalogService {
     const locked = await daos.skuCoupons.listActiveBySku(sku.id, true);
     if (locked.some(row => row.status === 'LOCKED')) throw new AppError('SKU_COUPON_STATE_CONFLICT', '兑换券与库存状态不一致');
     if (hash !== deactivationHash(sku.id, operation, sku.stock_reserved, locked)) throw new AppError('SKU_DEACTIVATION_IMPACT_CHANGED', '下架影响已变化，请重新预览');
+    const refundedAt = new Date();
     let total = 0;
     for (const coupon of locked) {
       const account = accounts.get(coupon.account_id);
@@ -147,7 +148,7 @@ export class AdminCatalogService {
       await daos.pointsAccounts.updateBalance({ id: account.id, balance: balance.toString(), totalEarned: account.total_earned, totalSpent: account.total_spent });
       account.balance = balance.toString();
       await daos.pointsLedger.insert({ account_id: account.id, points_delta: String(points), balance_after: account.balance, source_type: 'POINTS_EXCHANGE_REFUND', event_key: eventKey, source_ref: coupon.coupon_id, description: operation === 'DELETE' ? 'SKU删除，兑换积分退回' : 'SKU下架，兑换积分退回' });
-      await daos.skuCoupons.markRefunded(coupon.coupon_id, operation === 'DELETE' ? 'SKU删除' : 'SKU下架');
+      await daos.skuCoupons.markRefunded(coupon.coupon_id, operation === 'DELETE' ? 'SKU删除' : 'SKU下架', refundedAt);
       total += points;
       if (!integer(total)) throw new AppError('SKU_COUPON_STATE_CONFLICT', '退款积分超出范围');
     }

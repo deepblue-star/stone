@@ -6,6 +6,7 @@
 - `admin-web/`：Vue 3 + Vite 管理端；使用 hash 路由和 CloudBase 平台登录。
 - `cloudfunctions/business-api/`：事件云函数，构建后生成 index.js。
 - `packages/backend/`：领域服务、DAO、连接池和 UnitOfWork。
+- `packages/backend/src/dao/` 与 `packages/backend/src/catalog/*-dao.ts`：20 张业务表的原子数据访问，由两端后端共用；方法和事务调用约定见 `docs/backend/dao.md`。
 - `packages/contracts/`：响应、身份、JSON 类型和两端请求边界。
 - `database/migrations/`：带版本的数据库结构 SQL。
 - `docs/progress/foundation.md`：实际步骤和验证状态；未验证项不能视为已完成。
@@ -35,6 +36,8 @@
 `npm run db:seed:dev` 只建立空的公开配置：Banner 空数组、客服 null、入口空数组。不会覆盖已有商家配置，不生成虚构商品或订单。
 
 应用运行使用 mysql2/promise 原生连接，UnitOfWork 在一条连接上执行 begin、DAO 操作、commit 或 rollback。回滚失败会销毁连接，不把不确定事务放回连接池；正常路径才释放连接。
+
+全量 createDaos(executor) 现已构造 20 个具体 DAO；原目录专用 createCatalogDaos 保持八项兼容。DAO 只做 SQL 和数据映射，影响行数及事件时间由调用方处理；快照/流水不提供普通覆写删除。这不代表订单、支付、积分等 Service 或前端接口已经实现，不能把数据访问层覆盖数当作业务完成率。
 
 数据库是 VPC 内网地址。Windows 本机不能仅凭填写 .env 就直连内网，不能为了测试随意开放公网。实际连接与多表事务应在已接入同 VPC 的云函数或受控开发主机验证。
 

@@ -131,7 +131,7 @@ describe('business-api foundation', () => {
     expect(queries[0]?.params).toEqual(["x' OR 1=1"]);
     expect(await dao.findByKeys([])).toEqual([]);
     expect(queries).toHaveLength(1);
-    expect(Object.keys(createDaos(db))).toEqual(['siteConfig', 'admin', 'pointsAccounts', 'pointsLedger']);
+    expect(Object.keys(createDaos(db))).toEqual(['siteConfig', 'admin', 'pointsAccounts', 'pointsLedger', 'categories', 'items', 'skus', 'designs', 'designVersions', 'cart', 'addresses', 'orders', 'orderItems', 'payments', 'reconciliationRuns', 'reconciliationIssues', 'reservations', 'inventoryMovements', 'referrals', 'skuCoupons']);
   });
 });
 

@@ -81,7 +81,23 @@ describe('catalog permissions, inventory and refunds', () => {
     expect(result).toMatchObject({ refunded_points: 20, refunded_coupon_count: 1 });
     expect(f.daos.pointsAccounts.updateBalance).toHaveBeenCalledWith({ id: '4', balance: '70', totalEarned: '100', totalSpent: '50' });
     expect(f.daos.pointsLedger.insert).toHaveBeenCalledWith(expect.objectContaining({ points_delta: '20', source_type: 'POINTS_EXCHANGE_REFUND', event_key: 'POINTS_EXCHANGE_REFUND:5', source_ref: '5' }));
+    expect(f.daos.skuCoupons.markRefunded).toHaveBeenCalledWith('5', 'SKU删除', expect.any(Date));
     expect(f.events).toEqual(['account', 'balance', 'ledger', 'coupon', 'remove']);
+  });
+  it('supplies one refund event time for every coupon in a deactivation', async () => {
+    vi.useFakeTimers();
+    const now = new Date('2026-10-22T01:02:03.000Z');
+    vi.setSystemTime(now);
+    try {
+      const coupons = ['5', '6'].map(coupon_id => ({ coupon_id, account_id: '4', status: 'AVAILABLE', points_cost_snapshot: 20, _openid: 'o123456789x' }));
+      const refunds: unknown[][] = [];
+      const f = fixture({ skuCoupons: { listActiveBySku: vi.fn(async () => coupons), markRefunded: vi.fn(async (...args: unknown[]) => { refunds.push(args); return 1; }) } });
+      await f.admin.deleteSku({ sku_id: '1', impact_hash: deactivationHash('1', 'DELETE', 0, coupons) }, identity);
+      expect(refunds).toEqual([['5', 'SKU删除', now], ['6', 'SKU删除', now]]);
+      expect(refunds[0]?.[2]).toBe(refunds[1]?.[2]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
   it('requires trusted wechat identity for DIY material data', async () => {
     const f = fixture();

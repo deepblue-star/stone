@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-22",
+  "environment": "stone-d3gga4t2g2ffaedb6",
+  "businessTables": 20,
+  "capturedCalls": 142,
+  "uniqueSqlShapes": 131,
+  "mysqlExplainPassed": 131,
+  "mysqlExplainFailedFinal": 0,
+  "readOnly": true,
+  "explainAnalyze": false,
+  "businessWritesExecuted": false,
+  "schemaChanged": false,
+  "syntheticDateFixturesCorrectedForPlanning": 2,
+  "sqlShapeSha256": "6c3d0c52973c70cecbf69ac1b75d7fb20072597e71dfb22e34bbbe335230bfcd",
+  "unitTestsPassed": 287,
+  "integrationTestsPassed": 1,
+  "integrationTestsSkipped": 2,
+  "newLiveConcurrentTransactionsVerified": false
+}
