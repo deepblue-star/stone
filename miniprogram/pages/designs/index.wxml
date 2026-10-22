@@ -1,0 +1,17 @@
+<view class="screen">
+  <navigation-bar title="我的设计" back="{{true}}" color="#242424" background="#ffffff"/>
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading ? 'is-disabled' : ''}}" bindtap="load" disabled="{{loading}}">重新读取</button></view>
+    <view wx:if="{{loading && !items.length}}" class="empty">正在读取设计…</view>
+    <view wx:elif="{{!loading && !items.length && !error}}" class="empty">还没有保存的设计<view class="muted">在 DIY 中挑选材料，完成后保存。</view></view>
+    <view class="section">
+      <view wx:for="{{items}}" wx:key="design_id" class="list-row row" data-index="{{index}}" bindtap="detail" aria-role="button" aria-label="{{item.name}}，版本{{item.current_version_no}}">
+        <image wx:if="{{item.imageUrl}}" class="commerce-thumb" src="{{item.imageUrl}}" mode="aspectFill"/>
+        <view wx:else class="commerce-thumb thumb-empty">设计</view>
+        <view class="grow"><view class="item-name">{{item.name}}</view><view class="item-note">当前版本 V{{item.current_version_no}}</view><view class="item-note">{{item.timeText}}</view></view><text class="chevron">›</text>
+      </view>
+      <button wx:if="{{next}}" class="secondary {{loading ? 'is-disabled' : ''}}" bindtap="more" loading="{{loading}}" disabled="{{loading}}">加载更多</button>
+    </view>
+  </scroll-view>
+  <view class="footer"><button class="primary" bindtap="create">新建设计</button></view>
+</view>

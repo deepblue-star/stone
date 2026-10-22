@@ -1,5 +1,5 @@
 export class ApiError extends Error {
-  constructor(public readonly code: string, message: string, public readonly requestId?: string) {
+  constructor(public readonly code: string, message: string, public readonly requestId?: string, public readonly data?: unknown) {
     super(message); this.name = 'ApiError';
   }
 }
@@ -14,7 +14,7 @@ export function createRequestClient(invoke: (action: string, payload: object) =>
     if(!record(raw) || !record(raw.result)) throw new ApiError('INVALID_RESPONSE','服务响应格式错误');
     const result=raw.result;
     if(typeof result.ok!=='boolean' || typeof result.code!=='string' || typeof result.message!=='string' || typeof result.request_id!=='string' || !('data' in result)) throw new ApiError('INVALID_RESPONSE','服务响应格式错误');
-    if(!result.ok) throw new ApiError(result.code,result.message,result.request_id);
+    if(!result.ok) throw new ApiError(result.code,result.message,result.request_id,result.data);
     if(result.code!=='OK') throw new ApiError('INVALID_RESPONSE','服务响应状态错误',result.request_id);
     return {data:result.data as T,requestId:result.request_id};
   };

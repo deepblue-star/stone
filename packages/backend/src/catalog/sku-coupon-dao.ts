@@ -1,4 +1,7 @@
-import type { DatabaseExecutor } from "../db/database";
+import type { DatabaseExecutor, SqlParameter } from "../db/database";
+import { auditTimeConditions, type AdminAuditCursor, type AdminAuditTimeFilter } from '../dao/admin-audit-query';
+export interface AdminSkuCouponFilter extends AdminAuditTimeFilter { skuId?: string; openid?: string; status?: SkuCouponStatus }
+export interface AdminSkuCouponRow extends Omit<SkuCouponRow, 'updated_at' | 'is_deleted' | 'event_key' | 'locked_order_id' | 'used_order_id'> { _openid: string | null; locked_order_no: string | null; used_order_no: string | null; item_name: string | null; diameter_mm: string | number | null; image_file_id: string | null; sku_is_on_sale: number | null; item_is_on_sale: number | null; sku_is_deleted: number | null; item_is_deleted: number | null }
 import type { CouponRow } from "./dao";
 import type { RowMetadata, Timestamp } from "../dao/types";
 import { page, placeholders } from "../dao/sql";
@@ -44,6 +47,24 @@ const stateValues = (v: SkuCouponState) => [
 ];
 export class SkuCouponDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async listForAdmin(filter: AdminSkuCouponFilter, limit: number, before?: AdminAuditCursor): Promise<readonly AdminSkuCouponRow[]> {
+    let where = 'q.is_deleted=0';
+    const params: SqlParameter[] = [];
+    if (filter.skuId !== undefined) { where += ' AND q.sku_id=?'; params.push(filter.skuId); }
+    if (filter.openid !== undefined) { where += ' AND a._openid=?'; params.push(filter.openid); }
+    if (filter.status !== undefined) { where += ' AND q.status=?'; params.push(filter.status); }
+    where += auditTimeConditions('q', filter, before, params);
+    return this.db.query<AdminSkuCouponRow>(`SELECT CAST(q.id AS CHAR) AS id,CAST(q.account_id AS CHAR) AS account_id,a._openid,CAST(q.sku_id AS CHAR) AS sku_id,q.status,q.points_cost_snapshot,q.source_type,q.source_ref,locked_order.order_no AS locked_order_no,q.locked_at,used_order.order_no AS used_order_no,q.used_at,q.refunded_at,q.refund_reason,q.created_at,i.name AS item_name,s.diameter_mm,COALESCE(s.image_file_id,JSON_UNQUOTE(JSON_EXTRACT(i.images,'$[0]'))) AS image_file_id,s.is_on_sale AS sku_is_on_sale,i.is_on_sale AS item_is_on_sale,s.is_deleted AS sku_is_deleted,i.is_deleted AS item_is_deleted FROM user_sku_coupons q LEFT JOIN points_accounts a ON a.id=q.account_id LEFT JOIN catalog_skus s ON s.id=q.sku_id LEFT JOIN catalog_items i ON i.id=s.item_id LEFT JOIN orders locked_order ON locked_order.id=q.locked_order_id LEFT JOIN orders used_order ON used_order.id=q.used_order_id WHERE ${where} ORDER BY q.created_at DESC,q.id DESC LIMIT ?`, [...params, limit]);
+  }
+  async listAvailableForCheckout(accountId: string, skuIds: readonly string[], lock = false): Promise<readonly SkuCouponRow[]> {
+    if (!skuIds.length) return [];
+    return this.db.query<SkuCouponRow>(`SELECT ${columns} FROM user_sku_coupons WHERE account_id=? AND sku_id IN (${placeholders(skuIds)}) AND status='AVAILABLE' AND is_deleted=0 ORDER BY id${lock ? ' FOR UPDATE' : ''}`, [accountId,...skuIds]);
+  }
+  async countByStatus(accountId: string): Promise<readonly { status: string; count: string }[]> { return this.db.query<{ status: string; count: string }>('SELECT status,CAST(COUNT(*) AS CHAR) AS count FROM user_sku_coupons WHERE account_id=? AND is_deleted=0 GROUP BY status', [accountId]); }
+  async availableCounts(accountId: string): Promise<readonly { sku_id: string; count: string }[]> { return this.db.query<{ sku_id: string; count: string }>("SELECT CAST(q.sku_id AS CHAR) AS sku_id,CAST(COUNT(*) AS CHAR) AS count FROM user_sku_coupons q JOIN catalog_skus s ON s.id=q.sku_id JOIN catalog_items i ON i.id=s.item_id JOIN catalog_categories c ON c.id=i.category_id WHERE q.account_id=? AND q.status='AVAILABLE' AND q.is_deleted=0 AND s.is_deleted=0 AND s.is_on_sale=1 AND i.is_deleted=0 AND i.is_on_sale=1 AND c.catalog_type='BEAD' AND c.is_deleted=0 AND c.is_enabled=1 GROUP BY q.sku_id ORDER BY q.sku_id", [accountId]); }
+  async findByEventKey(key: string, lock = false): Promise<SkuCouponRow | null> {
+    return (await this.db.query<SkuCouponRow>(`SELECT ${columns} FROM user_sku_coupons WHERE event_key=? AND is_deleted=0 LIMIT 1${lock ? ' FOR UPDATE' : ''}`, [key]))[0] ?? null;
+  }
   async listActiveBySku(
     skuId: string,
     lock = false,

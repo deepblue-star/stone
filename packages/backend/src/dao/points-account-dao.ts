@@ -1,4 +1,4 @@
-import type { EntityId } from "../../../contracts/src";
+import type { EntityId } from "../../../contracts/src/index";
 import type { DatabaseExecutor } from "../db/database";
 import { placeholders } from "./sql";
 export interface PointsAccount {

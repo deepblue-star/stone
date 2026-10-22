@@ -1,0 +1,9 @@
+export type ReconciliationIssueType = 'WECHAT_SUCCESS_LOCAL_PENDING' | 'LOCAL_SUCCESS_WECHAT_MISSING' | 'AMOUNT_MISMATCH' | 'TRANSACTION_ID_MISMATCH' | 'OTHER';
+export type ReconciliationResolutionStatus = 'OPEN' | 'RESOLVED' | 'IGNORED';
+export interface ListReconciliationIssuesPayload { resolution_status: ReconciliationResolutionStatus | null; bill_date: string | null; issue_type: ReconciliationIssueType | null; page_token: string | null; page_size: number }
+export interface ReconciliationIssuePayload { issue_id: string }
+export interface ResolveReconciliationIssuePayload extends ReconciliationIssuePayload { resolution_status: 'RESOLVED' | 'IGNORED'; resolution_note: string }
+export interface ReconciliationIssueSummary { issue_id: string; bill_date: string; issue_type: ReconciliationIssueType; order_no: string | null; out_trade_no: string; local_status: string | null; wechat_trade_state: string | null; local_amount_cent: string | null; wechat_amount_cent: string | null; resolution_status: ReconciliationResolutionStatus; created_at: string }
+export interface ReconciliationIssuePage { issues: ReconciliationIssueSummary[]; next_page_token: string | null; open_count: string }
+export interface ReconciliationIssueDetail extends ReconciliationIssueSummary { run_id: string; order_id: string | null; transaction_id: string | null; resolution_note: string | null; resolved_by: string | null; resolved_at: string | null; updated_at: string; related_order: { order_no: string; status: string; total_amount_cent: string } | null; related_payment: { out_trade_no: string; transaction_id: string | null; trade_state: string | null; success_time: string | null } | null }
+export interface ReconciliationResolution { issue_id: string; resolution_status: ReconciliationResolutionStatus; resolution_note: string | null; resolved_by: string | null; resolved_at: string | null; idempotent_replay: boolean }

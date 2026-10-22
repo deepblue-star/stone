@@ -33,6 +33,7 @@
     "@vue/test-utils": "2.4.6",
     "esbuild": "^0.28.2",
     "happy-dom": "^21.0.4",
+    "province-city-china": "^9.0.0",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vite": "^8.3.4",

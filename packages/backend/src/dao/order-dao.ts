@@ -85,6 +85,8 @@ function filters(filter: OrderFilter): [string, SqlParameter[]] {
 /** Identity and compensation reads deliberately include hidden financial records. */
 export class OrderDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async now(): Promise<Date> { const row = (await this.db.query<{ now: Date | string }>('SELECT UTC_TIMESTAMP() AS now'))[0]; if (!row) throw new Error('Database clock unavailable'); return row.now instanceof Date ? row.now : new Date(`${row.now.replace(' ', 'T')}Z`); }
+  async firstCompletedOrder(openid: string, lock = false): Promise<{ order_no: string } | null> { return (await this.db.query<{ order_no: string }>(`SELECT order_no FROM orders WHERE _openid=? AND status='COMPLETED' ORDER BY completed_at,id LIMIT 1${lock ? ' FOR UPDATE' : ''}`, [openid]))[0] ?? null; }
   async insert(v: OrderInsert): Promise<string> {
     return (
       await this.db.execute(

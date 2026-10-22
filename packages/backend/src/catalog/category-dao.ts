@@ -10,6 +10,18 @@ const categoryColumns =
   "CAST(c.id AS CHAR) AS id,c.catalog_type,c.name,c.sort_order,c.is_enabled,c.is_deleted,c.updated_at";
 export class CategoryDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async findHistoricalByIds(ids: readonly string[]): Promise<readonly CategoryRow[]> {
+    if (!ids.length) return [];
+    return this.db.query<CategoryRow>(`SELECT ${categoryColumns} FROM catalog_categories c WHERE c.id IN (${placeholders(ids)}) ORDER BY c.id`, ids);
+  }
+  /** Public landing metadata; counts and covers obey the same visible-item filter. */
+  async listPublicSummaries(): Promise<readonly (CategoryRow & { cover_file_id: string | null })[]> {
+    return this.db.query<CategoryRow & { cover_file_id: string | null }>(
+      `SELECT ${categoryColumns},
+       (SELECT COUNT(*) FROM catalog_items i WHERE i.category_id=c.id AND i.is_deleted=0 AND i.is_on_sale=1) AS item_count,
+       (SELECT JSON_UNQUOTE(JSON_EXTRACT(i.images,'$[0]')) FROM catalog_items i WHERE i.category_id=c.id AND i.is_deleted=0 AND i.is_on_sale=1 AND JSON_LENGTH(i.images)>0 ORDER BY i.id LIMIT 1) AS cover_file_id
+       FROM catalog_categories c WHERE c.catalog_type='STANDARD' AND c.is_enabled=1 AND c.is_deleted=0 ORDER BY c.sort_order,c.id`, []);
+  }
   async findById(id: string, lock = false): Promise<CategoryRow | null> {
     return (
       (

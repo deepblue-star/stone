@@ -1,0 +1,7 @@
+<view class="screen"><navigation-bar title="邀请好友" back="{{true}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list"><view class="section"><view>我的邀请码</view><view class="invite-number">{{info?info.invite_code:'—'}}</view><view class="muted">好友完成首笔订单后，您可获得积分，用于兑换免费珠子。</view><view class="actions row"><button class="secondary {{!info?'is-disabled':''}}" disabled="{{!info}}" bindtap="copy">复制邀请码</button><button class="primary {{!info?'is-disabled':''}}" disabled="{{!info}}" open-type="share">分享小程序</button></view></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{info}}" class="section"><view class="list-row">已邀请 {{info.invited_user_count}} 人</view><view class="list-row">已获得首单奖励 {{info.rewarded_user_count}} 人</view></view>
+    <view class="section"><view>填写分享人的邀请码</view><view wx:if="{{info&&info.bound_referrer}}" class="muted">已绑定分享人，不能更换。</view><block wx:else><input class="code-input" value="{{code}}" maxlength="4" placeholder="四位大写字母或数字" bindinput="input" /><button class="primary {{submitting?'is-disabled':''}}" disabled="{{submitting}}" bindtap="bind">{{submitting?'正在绑定…':'确认绑定'}}</button><view class="muted">完成过订单后不能补绑，绑定后不能更换。</view></block></view>
+  </scroll-view>
+</view>

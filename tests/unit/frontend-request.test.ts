@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { createRequestClient, SubmissionGate } from '../../packages/contracts/src/client.js';
 
+it('preserves the current server quote when checkout prices or rights changed', async () => {
+  const quote = { total_amount_cent: 900, quote_hash: 'fresh' };
+  const request = createRequestClient(async () => ({ result: { ok: false, code: 'CHECKOUT_CHANGED', message: '结算内容已变化', request_id: 'q', data: quote } }));
+  await expect(request('createDirectOrder', {})).rejects.toMatchObject({ code: 'CHECKOUT_CHANGED', data: quote });
+});
+
 describe('shared request boundary', () => {
   it('unwraps only the event function result and preserves business error/request ID', async () => {
     const call = createRequestClient(async () => ({ result: {ok:false,code:'FORBIDDEN',message:'无权限',data:null,request_id:'r-1'} }));

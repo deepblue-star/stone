@@ -1,0 +1,11 @@
+<view class="screen"><navigation-bar title="积分明细" back="{{true}}" background="#fff" color="#242424" />
+  <view class="section row between"><view><view class="muted">当前积分</view><view class="balance">{{balance}}</view></view><button class="secondary exchange-entry" bindtap="mall">去兑换 ›</button></view>
+  <view wx:if="{{centerError}}" class="error-box">{{centerError}}<button class="secondary {{centerLoading?'is-disabled':''}}" disabled="{{centerLoading}}" bindtap="loadCenter">重新读取余额</button></view>
+  <view class="filters row"><button wx:for="{{filters}}" wx:key="value" class="{{(direction||'')===item.value?'selected':''}}" data-value="{{item.value}}" bindtap="filter">{{item.name}}</button></view>
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more"><view class="section">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{loading&&!items.length}}" class="empty">正在读取…</view><view wx:elif="{{!items.length&&!error}}" class="empty">暂无积分记录</view>
+    <view wx:for="{{items}}" wx:key="index" class="list-row row between"><view class="ledger-text"><view>{{item.description}}</view><view class="muted">{{item.timeText}}</view><view class="muted">变动后余额 {{item.balance_after}}</view></view><text class="price">{{item.pointsText}}</text></view>
+    <button wx:if="{{nextPage}}" class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="more">加载更多</button>
+  </view></scroll-view>
+</view>

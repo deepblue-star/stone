@@ -1,0 +1,5 @@
+@import "../../styles/alpha.wxss";
+.invite-number { font-size: 88rpx; font-weight: 600; line-height: 1.8; letter-spacing: 6rpx; }
+.actions { gap: 20rpx; margin-top: 28rpx; }
+.actions button { width: 50%; margin: 0; font-size: 27rpx; }
+.code-input { height: 88rpx; margin: 24rpx 0; padding: 0 20rpx; background: #f5f5f5; }

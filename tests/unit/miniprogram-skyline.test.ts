@@ -31,20 +31,18 @@ it('renders the back arrow without unsupported WebKit mask declarations',()=>{
   expect(source('components/navigation-bar/navigation-bar.wxml')).toContain('weui-navigation-bar__back-arrow');
 });
 
-it('gives the heading its remaining width and keeps price parts on one flex row',()=>{
+it('gives category and product text remaining width and keeps price parts on one flex row',()=>{
   const catalog=source('pages/catalog/index.wxss');
-  expect(source('pages/catalog/index.wxml')).toContain('class="catalog-heading"');
-  expect(source('pages/catalog/index.wxml')).toMatch(/<button[^>]*size="mini"[^>]*class="materials-link"/);
-  expect(catalog).toMatch(/\.catalog-heading\s*\{[^}]*flex:\s*1/);
-  expect(catalog).toMatch(/\.materials-link\s*\{[^}]*width:\s*144rpx/);
-  expect(catalog).toMatch(/\.product-card\s*\{[^}]*box-sizing:\s*border-box/);
-  expect(catalog).toMatch(/\.product-price\s*\{[^}]*display:\s*flex/);
+  expect(source('pages/catalog/index.wxml')).toContain('category-row row');
+  expect(catalog).toMatch(/\.category-info\s*\{[^}]*flex:\s*1/);
+  expect(source('pages/products/index.wxss')).toMatch(/\.product-info\s*\{[^}]*flex:\s*1/);
+  expect(source('styles/alpha.wxss')).toMatch(/\.row\s*\{[^}]*flex-direction:\s*row/);
   expect(source('pages/product/index.wxss')).toMatch(/\.detail-price\s*\{[^}]*display:\s*flex/);
 });
 
 it('sets horizontal flex directions explicitly instead of Skyline default column',()=>{
   const layouts:Record<string,string[]>={
-    'pages/catalog/index.wxss':['catalog-topline','category-tabs','product-grid','product-price'],
+    'styles/alpha.wxss':['row'],
     'pages/product/index.wxss':['detail-price','spec-options','quantity-row','quantity-controls'],
     'pages/materials/index.wxss':['material-switch','material-tabs','material-skus','material-sku'],
   };

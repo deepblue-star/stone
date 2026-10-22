@@ -1,0 +1,20 @@
+<view class="screen editor-screen"><navigation-bar title="手串设计" back="{{true}}" background="#fff" color="#242424" />
+  <view class="editor-status row between"><text class="muted">手围约 {{perimeterText}} cm</text><text>预计价格 {{priceText==='需更新材料'?priceText:'¥'+priceText}}</text></view>
+  <view class="canvas-area">
+    <canvas wx:if="{{nativeCanvasMounted}}" id="bracelet" type="2d" class="bracelet-canvas {{previewMode==='canvas'?'':'bracelet-canvas-pending'}}" bindtouchstart="touchStart" catchtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchCancel" />
+    <view wx:if="{{previewMode!=='canvas'}}" class="bracelet-preview" style="{{previewStyle}}" bindtouchstart="touchStart" catchtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchCancel" aria-label="手串实时预览">
+      <view class="preview-guide" style="{{guideStyle}}" />
+      <view wx:for="{{previewBeads}}" wx:key="index" class="preview-bead {{item.selected?'preview-bead-selected':''}}" style="{{item.style}}" data-index="{{index}}" catchtouchstart="touchStart" catchtap="selectPreviewBead" aria-role="button" aria-label="{{item.label}}{{item.selected?'，已选中':''}}">
+        <image wx:if="{{item.url}}" class="preview-bead-image" src="{{item.url}}" mode="aspectFill" data-url="{{item.url}}" binderror="previewImageError" />
+        <view wx:else class="preview-bead-missing"><text>缺图</text></view>
+      </view>
+    </view>
+    <view class="canvas-note muted">{{status}}</view>
+  </view>
+  <view wx:if="{{error}}" class="editor-error">{{error}}<text class="link" bindtap="load"> 重新读取</text></view>
+  <view class="editor-actions row"><button class="secondary" bindtap="tools">功能</button><button class="primary {{submitting?'is-disabled':''}}" disabled="{{submitting}}" bindtap="save">保存</button><view class="spacer" /><button class="secondary {{submitting?'is-disabled':''}}" disabled="{{submitting}}" bindtap="complete">完成设计</button></view>
+  <view class="material-toolbar row"><button class="{{type==='BEAD'?'active':''}}" data-type="BEAD" bindtap="changeType">珠子</button><button class="{{type==='ACCESSORY'?'active':''}}" data-type="ACCESSORY" bindtap="changeType">配件</button><input value="{{keyword}}" placeholder="搜索材料" bindinput="input" /></view>
+  <view class="material-panel row"><scroll-view class="material-sidebar" scroll-y type="list"><view class="material-category {{filter==='COUPON'?'active':''}}" data-value="COUPON" bindtap="chooseFilter">兑换券</view><view class="material-category {{filter==='USED'?'active':''}}" data-value="USED" bindtap="chooseFilter">正在使用</view><view wx:for="{{categories}}" wx:key="id" class="material-category {{!filter&&category===item.id?'active':''}}" data-id="{{item.id}}" bindtap="chooseCategory">{{item.name}}</view></scroll-view>
+    <scroll-view class="material-body" scroll-y type="list"><view wx:if="{{loading}}" class="empty">正在读取…</view><view wx:elif="{{!materials.length}}" class="empty">{{filter==='COUPON'?'当前设计暂无剩余免费珠子':'暂无符合条件的材料'}}</view><view class="sku-grid row"><view wx:for="{{materials}}" wx:key="id" class="sku-card {{!item.available?'is-disabled':''}}" data-id="{{item.id}}" bindtap="add" aria-role="button" aria-label="{{item.name}}"><view class="sku-photo"><image wx:if="{{item.url}}" src="{{item.url}}" mode="aspectFit" lazy-load /><view wx:else class="no-photo">暂无图片</view><text wx:if="{{item.free}}" class="free-count">{{item.free}}</text></view><view class="sku-name">{{item.name}}</view><view class="sku-spec">{{item.diameter_mm?item.diameter_mm+'mm':'默认规格'}} · {{item.free?'免费兑换':'¥'+item.priceText}}</view><view wx:if="{{!item.free&&item.used}}" class="sku-spec muted">本设计已用 {{item.used}} 颗</view><view wx:if="{{!item.available}}" class="sku-spec">暂不可添加</view></view></view></scroll-view>
+  </view>
+</view>

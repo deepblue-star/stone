@@ -1,4 +1,4 @@
-import type { AdjustInventoryPayload, InventoryMovementPage, InventoryStock, ListInventoryMovementsPayload, TrustedIdentity } from '../../../contracts/src';
+import type { AdjustInventoryPayload, InventoryMovementPage, InventoryStock, ListInventoryMovementsPayload, TrustedIdentity } from '../../../contracts/src/index';
 import type { CatalogDaos } from '../catalog/dao';
 import { stockModel } from '../catalog/models';
 import { inventoryTotal, iso, PageTokens, validateCatalogPayload } from '../catalog/rules';

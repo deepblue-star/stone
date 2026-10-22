@@ -1,0 +1,12 @@
+<view class="screen">
+  <navigation-bar title="确认订单" back="{{true}}" color="#242424" background="#ffffff"/>
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="section" bindtap="chooseAddress" aria-role="button"><view class="row between"><view class="grow"><view class="address-head">收货地址</view><view wx:if="{{quote}}"><view>{{quote.address.receiver_name}}　{{quote.address.phone_masked}}</view><view class="address-line">{{quote.address.full_address}}</view></view><view wx:else class="muted">请选择收货地址</view></view><text class="chevron">›</text></view></view>
+    <view class="divider"/>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading || submitting ? 'is-disabled' : ''}}" wx:if="{{!quote}}" bindtap="load" disabled="{{loading || submitting}}">重新预览</button></view>
+    <view wx:if="{{loading}}" class="empty">正在读取最新报价…</view>
+    <view wx:if="{{quote}}"><view class="section"><view wx:for="{{items}}" wx:key="index" class="list-row row"><image wx:if="{{item.imageUrl}}" class="commerce-thumb" src="{{item.imageUrl}}" mode="aspectFill"/><view wx:else class="commerce-thumb thumb-empty">{{item.source_type === 'DESIGN' ? '设计' : '商品'}}</view><view class="grow"><view class="item-name">{{item.name}}</view><view class="item-note">数量 × {{item.quantity}}</view><view wx:if="{{item.freeCount}}" class="item-note">本次应用材料兑换券 {{item.freeCount}} 颗，优惠 ¥{{item.discountText}}</view><view class="danger" wx:if="{{!item.purchasable}}">{{item.unavailable_reason || '暂不可购买'}}</view></view><text class="price">¥{{item.amountText}}</text></view></view>
+      <view class="divider"/><view class="section"><view class="amount-line"><text>商品金额</text><text>¥{{goodsText}}</text></view><view class="amount-line"><text>材料兑换券优惠</text><text>−¥{{discountText}}</text></view><view class="amount-line"><text>运费</text><text>¥{{shippingText}}</text></view><view class="amount-line"><text>应付金额</text><text class="price">¥{{totalText}}</text></view><view class="muted">报价由服务端统一计算。提交时会再次校验价格、兑换券和库存；如有变化，需要重新确认。</view></view>
+    </view>
+  </scroll-view><view class="footer"><view wx:if="{{phase}}" class="payment-note footer-note">{{phase}}</view><view class="row between footer-note"><text>应付</text><text class="price">¥{{totalText}}</text></view><button class="primary {{!canSubmit || loading || submitting ? 'is-disabled' : ''}}" bindtap="submit" disabled="{{!canSubmit || loading || submitting}}" loading="{{submitting}}">{{submitting ? '正在处理…' : '提交订单并支付'}}</button></view>
+</view>

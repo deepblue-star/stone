@@ -248,7 +248,7 @@ onMounted(async () => {
       <nav aria-label="管理导航">
         <RouterLink to="/catalog" aria-current="page"
           ><Layers :size="19" aria-hidden="true" />商品与库存</RouterLink
-        ><RouterLink to="/"
+        ><RouterLink to="/orders">订单履约</RouterLink><RouterLink to="/audit">会员权益</RouterLink><RouterLink to="/settings">站点配置</RouterLink><RouterLink to="/"
           ><RefreshCw :size="19" aria-hidden="true" />联通检查</RouterLink
         >
       </nav>

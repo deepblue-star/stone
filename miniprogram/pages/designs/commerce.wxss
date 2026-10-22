@@ -1,0 +1,32 @@
+@import "../../styles/alpha.wxss";
+.commerce-thumb { width: 140rpx; height: 140rpx; background: #f4f4f4; flex-shrink: 0; margin-right: 24rpx; border-radius: 10rpx; }
+.thumb-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 23rpx; }
+.grow { flex: 1; min-width: 0; }
+.item-name { font-size: 30rpx; line-height: 1.6; overflow-wrap: break-word; }
+.item-note { margin-top: 8rpx; color: #777; font-size: 24rpx; line-height: 1.6; }
+.danger { color: #a52b2b; font-size: 25rpx; line-height: 1.6; }
+.actions { display: flex; flex-direction: row; align-items: center; gap: 16rpx; margin-top: 20rpx; flex-wrap: wrap; }
+.actions button { margin: 0; padding: 0 24rpx; font-size: 25rpx; }
+.counter { display: flex; flex-direction: row; align-items: center; gap: 18rpx; }
+.counter button { margin: 0; padding: 0; width: 68rpx; height: 68rpx; line-height: 68rpx; font-size: 30rpx; background: #f4f4f4; }
+.counter text { min-width: 36rpx; text-align: center; }
+.bottom-actions { display: flex; flex-direction: row; align-items: center; gap: 18rpx; }
+.bottom-actions button { margin: 0; flex: 1; padding: 0 16rpx; }
+.small-button { margin: 0; padding: 0 20rpx; font-size: 24rpx; }
+.amount-line { display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 22rpx 0; }
+.address-line { line-height: 1.8; font-size: 27rpx; overflow-wrap: break-word; }
+.address-head { font-size: 30rpx; margin-bottom: 12rpx; }
+.badge { color: #b93434; font-size: 23rpx; margin-left: 16rpx; }
+.select-checkbox { margin-right: 16rpx; }
+.footer-note { margin-bottom: 14rpx; }
+.form-group { padding: 0 32rpx; }
+.filters { display: flex; flex-direction: row; flex-wrap: wrap; padding: 16rpx; gap: 8rpx; }
+.filter { margin: 0; background: #fff; font-size: 24rpx; padding: 0 16rpx; color: #777; }
+.filter.active { color: #b93434; border-bottom: 3rpx solid #b93434; }
+.order-number { font-size: 25rpx; word-break: break-all; line-height: 1.8; }
+.version-list { padding: 12rpx 0; }
+.version-button { width: 100%; text-align: left; background: #f6f6f6; padding: 22rpx; font-size: 25rpx; margin: 12rpx 0; }
+.version-button.active { color: #b93434; }
+.snapshot { background: #f6f6f6; padding: 18rpx; margin-top: 12rpx; font-size: 24rpx; line-height: 1.7; }
+.status { font-size: 36rpx; margin-bottom: 16rpx; }
+.payment-note { background: #fff8ed; color: #875d29; padding: 20rpx 28rpx; line-height: 1.7; font-size: 25rpx; }

@@ -12,20 +12,36 @@
     <view wx:elif="{{item}}"
       ><view
         class="detail-photo"
-        bindtap="previewImage"
-        aria-role="button"
-        aria-label="查看商品大图"
-        ><image
-          wx:if="{{coverUrl}}"
-          src="{{coverUrl}}"
-          mode="aspectFill"
-          binderror="coverError"
-        /><view wx:else class="detail-placeholder">图片暂不可用</view
-        ><text wx:if="{{coverUrl}}" class="photo-hint">点击查看大图</text></view
+        ><swiper
+          wx:if="{{gallery.length}}"
+          class="detail-gallery"
+          current="{{galleryCurrent}}"
+          indicator-dots="{{gallery.length > 1}}"
+          indicator-color="#d7dfd8"
+          indicator-active-color="#285c4d"
+          autoplay="{{false}}"
+          data-version="{{galleryVersion}}"
+          bindchange="galleryChange"
+        ><swiper-item wx:for="{{gallery}}" wx:for-item="image" wx:key="key"
+          ><image
+            src="{{image.url}}"
+            mode="aspectFill"
+            data-id="{{image.id}}"
+            data-url="{{image.url}}"
+            data-version="{{galleryVersion}}"
+            binderror="coverError"
+            bindtap="previewImage"
+            aria-role="button"
+            aria-label="{{item.name}}，第{{index + 1}}张商品图，点击查看大图"
+          /></swiper-item
+        ></swiper><view wx:else class="detail-placeholder">图片暂不可用</view
+        ><text wx:if="{{gallery.length}}" class="photo-hint">{{gallery.length > 1 ? '左右滑动 · ' : ''}}点击查看大图</text></view
       >
       <view class="product-content"
+        ><view class="detail-heading"
+          ><view class="detail-name">{{item.name}}</view
+          ><view class="detail-type">标准商品</view></view
         ><view class="detail-price"><text>¥</text>{{priceText||'—'}}</view
-        ><view class="detail-name">{{item.name}}</view
         ><view class="detail-stock">{{stockText}}</view>
         <view class="spec-section"
           ><view class="section-label">选择规格</view
@@ -95,9 +111,9 @@
           ><view>小计：¥{{totalText}}</view
           ><view class="catalog-caption"
             >展示价格仅供选购参考，下单时以后端核价为准。</view
-          ><button bindtap="showPurchaseStatus">购买功能尚未开放</button></view
+          ></view
         ></view
       ></view
     >
-  </scroll-view></view
+  </scroll-view><view class="product-footer"><view wx:if="{{purchaseError}}" class="purchase-error">{{purchaseError}}</view><view class="product-actions"><button class="service-action" bindtap="contact">客服</button><button class="cart-action {{submitting || loading || error || !item || !sku || sku.available_stock < quantity ? 'is-disabled' : ''}}" bindtap="addCart" disabled="{{submitting || loading || error || !item || !sku || sku.available_stock < quantity}}" loading="{{submitting}}">加入购物车</button><button class="buy-action {{submitting || loading || error || !item || !sku || sku.available_stock < quantity ? 'is-disabled' : ''}}" bindtap="buy" disabled="{{submitting || loading || error || !item || !sku || sku.available_stock < quantity}}">立即购买 ¥{{totalText}}</button></view></view></view
 >

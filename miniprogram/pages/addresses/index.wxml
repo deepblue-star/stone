@@ -1,0 +1,12 @@
+<view class="screen">
+  <navigation-bar title="{{selecting ? '选择收货地址' : '收货地址'}}" back="{{true}}" color="#242424" background="#ffffff"/>
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading || submitting ? 'is-disabled' : ''}}" bindtap="load" disabled="{{loading || submitting}}">重新读取</button></view>
+    <view wx:if="{{loading && !items.length}}" class="empty">正在读取地址…</view>
+    <view wx:elif="{{!loading && !items.length && !error}}" class="empty">还没有收货地址</view>
+    <view class="section"><view wx:for="{{items}}" wx:key="address_id" class="list-row">
+      <view data-id="{{item.address_id}}" bindtap="choose"><view class="address-head">{{item.receiver_name}}　{{item.phone}}<text wx:if="{{item.is_default}}" class="badge">默认</text></view><view class="address-line">{{item.province}} {{item.city}} {{item.district}} {{item.address_line}}</view><view wx:if="{{selecting}}" class="item-note link">点击使用此地址</view></view>
+      <view class="row between actions"><view class="row"><checkbox checked="{{item.is_default}}" data-id="{{item.address_id}}" bindtap="defaultAddress" disabled="{{submitting}}" color="#b93434"/><text class="muted">默认地址</text></view><view class="actions"><button class="secondary {{submitting ? 'is-disabled' : ''}}" data-id="{{item.address_id}}" bindtap="edit" disabled="{{submitting}}">编辑</button><button class="secondary {{submitting ? 'is-disabled' : ''}}" data-id="{{item.address_id}}" bindtap="remove" disabled="{{submitting}}">删除</button></view></view>
+    </view></view>
+  </scroll-view><view class="footer"><button class="primary {{submitting ? 'is-disabled' : ''}}" bindtap="create" disabled="{{submitting}}">新增收货地址</button></view>
+</view>

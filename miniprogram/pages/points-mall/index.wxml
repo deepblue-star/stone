@@ -1,0 +1,10 @@
+<view class="screen"><navigation-bar title="积分商城" back="{{true}}" background="#fff" color="#242424" />
+  <view class="section row between"><view>我的积分 <text class="price">{{balance}}</text></view><text class="link" bindtap="ledger">积分明细 ›</text></view>
+  <scroll-view class="mall-category-scroll" scroll-x enhanced show-scrollbar="{{false}}"><view class="mall-categories" style="width: {{categoryWidth}}rpx"><button wx:for="{{categories}}" wx:key="id" class="category-button {{category === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="chooseCategory" aria-label="筛选{{item.name}}">{{item.name}}</button></view></scroll-view>
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more"><view class="section muted">兑换后获得指定 SKU 免费 1 颗的券，在 DIY 中使用；兑换不预占库存。</view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{!items.length&&!listError}}" class="empty">{{loading?'正在读取…':'暂无可兑换珠子'}}</view>
+    <view class="mall-grid row"><view wx:for="{{items}}" wx:key="sku_id" class="mall-card"><image wx:if="{{item.url}}" src="{{item.url}}" mode="aspectFit" lazy-load /><view wx:else class="mall-placeholder">暂无图片</view><view>{{item.item_name}}</view><view class="muted">{{item.diameter_mm?item.diameter_mm+' mm':'默认规格'}}</view><view class="price">{{item.points_cost}} 积分／颗</view><view class="muted">当前可用库存 {{item.available_stock}}</view><button class="primary {{submitting?'is-disabled':''}}" disabled="{{submitting}}" data-id="{{item.sku_id}}" bindtap="exchange">兑换</button></view></view>
+    <view class="section"><button class="secondary" bindtap="coupons">查看我的优惠券 ›</button><button wx:if="{{nextPage}}" class="secondary next {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="more">加载更多</button></view>
+  </scroll-view>
+</view>

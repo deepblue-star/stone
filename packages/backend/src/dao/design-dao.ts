@@ -17,6 +17,7 @@ const columns =
   "CAST(id AS CHAR) AS id,_openid,name,current_version_no,created_at,updated_at,is_deleted";
 export class DesignDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async countByOwner(openid: string): Promise<string> { return (await this.db.query<{ count: string }>('SELECT CAST(COUNT(*) AS CHAR) AS count FROM designs WHERE _openid=? AND is_deleted=0', [openid]))[0]?.count ?? '0'; }
   async insert(input: DesignInsert): Promise<string> {
     return (
       await this.db.execute(

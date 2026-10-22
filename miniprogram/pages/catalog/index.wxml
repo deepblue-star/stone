@@ -1,96 +1,13 @@
-<view class="catalog-screen"
-  ><navigation-bar
-    title="Stone 好物"
-    back="{{false}}"
-    color="#20372f"
-    background="#f7f6f2"
-  /><scroll-view class="catalog-scroll" scroll-y type="list">
-    <view class="catalog-topline"
-      ><view class="catalog-heading"
-        ><text class="overline">THE STONE COLLECTION</text
-        ><view class="catalog-title">好物，慢慢挑。</view
-        ><view class="catalog-subtitle"
-          >材质、规格与价格，一目了然。</view
-        ></view
-      ><button size="mini" class="materials-link" bindtap="openMaterials">
-        材料目录
-      </button></view
-    >
-    <scroll-view class="category-scroll" scroll-x enhanced
-      ><view class="category-tabs"
-        ><button
-          wx:for="{{categories}}"
-          wx:key="id"
-          class="category-tab {{categoryId===item.id?'selected':''}}"
-          data-id="{{item.id}}"
-          bindtap="categoryTap"
-          aria-label="{{item.name}}"
-        >
-          {{item.name}}
-        </button></view
-      ></scroll-view
-    >
-    <view wx:if="{{error}}" class="catalog-message error"
-      ><text>{{error}}</text
-      ><button class="{{loading?'is-disabled':''}}" bindtap="retry" disabled="{{loading}}">重新读取</button></view
-    >
-    <view wx:if="{{loading&&!items.length}}" class="catalog-empty"
-      >正在为你读取商品…</view
-    >
-    <view wx:elif="{{!categories.length&&!error}}" class="catalog-empty"
-      ><view class="empty-mark">STONE</view
-      ><view class="empty-title">好物正在准备中</view
-      ><view>商家上架后，会在这里展示。</view
-      ><button class="{{loading?'is-disabled':''}}" bindtap="load" disabled="{{loading}}">刷新看看</button></view
-    >
-    <view wx:elif="{{!items.length&&!error}}" class="catalog-empty"
-      ><view class="empty-title">这个分类暂时没有商品</view
-      ><view>可以切换其他分类再看看。</view></view
-    >
-    <view class="product-grid"
-      ><view
-        wx:for="{{items}}"
-        wx:key="item_id"
-        class="product-card"
-        data-id="{{item.item_id}}"
-        bindtap="openItem"
-        aria-role="button"
-        aria-label="{{item.name}}，{{item.priceText}}元起"
-        ><view class="product-photo"
-          ><image
-            wx:if="{{item.coverUrl}}"
-            src="{{item.coverUrl}}"
-            mode="aspectFill"
-            lazy-load
-            data-index="{{index}}"
-            binderror="imageFailed"
-          /><view wx:else class="photo-unavailable">图片暂不可用</view
-          ><text wx:if="{{!item.has_available_sku}}" class="sold-out"
-            >暂时缺货</text
-          ></view
-        ><view class="product-info"
-          ><view class="product-name">{{item.name}}</view
-          ><view class="product-price"
-            ><text wx:if="{{item.min_price_cent!==null}}">¥</text
-            >{{item.priceText}}<text
-              wx:if="{{item.min_price_cent!==null}}"
-              class="price-suffix"
-              >起</text
-            ></view
-          ></view
-        ></view
-      ></view
-    >
-    <button
-      wx:if="{{nextPage}}"
-      class="catalog-more {{loading?'is-disabled':''}}"
-      bindtap="loadMore"
-      disabled="{{loading}}"
-    >
-      {{loading?'正在读取…':'查看更多好物'}}</button
-    ><view class="catalog-bottom"
-      ><text>按实际 SKU 显示价格与库存</text
-      ><button bindtap="openFoundation">开发联通检查</button></view
-    >
-  </scroll-view></view
->
+<view class="screen">
+  <navigation-bar title="好物" back="{{false}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="search-row row"><input value="{{keyword}}" placeholder="搜索商品" maxlength="160" confirm-type="search" bindinput="input" bindconfirm="search" /><button bindtap="search">搜索</button></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{loading&&!categories.length}}" class="empty">正在读取分类…</view>
+    <view wx:elif="{{!categories.length&&!error}}" class="empty">暂无商品分类</view>
+    <view class="categories"><view wx:for="{{categories}}" wx:key="id" class="category-row row" data-index="{{index}}" bindtap="openCategory" aria-role="button" aria-label="{{item.name}}">
+      <image wx:if="{{item.coverUrl}}" src="{{item.coverUrl}}" mode="aspectFill" lazy-load /><view wx:else class="category-placeholder">分类</view>
+      <view class="category-info"><view class="category-name">{{item.name}}</view><view wx:if="{{item.item_count!==undefined}}" class="muted">{{item.item_count}} 个商品</view></view><text class="chevron">›</text>
+    </view></view>
+  </scroll-view>
+</view>

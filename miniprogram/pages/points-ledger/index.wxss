@@ -1,0 +1,7 @@
+@import "../../styles/alpha.wxss";
+.balance { font-size: 44rpx; line-height: 1.5; }
+.exchange-entry { width: auto; flex-shrink: 0; margin: 0 0 0 24rpx; padding: 0 24rpx; white-space: nowrap; }
+.filters { padding: 12rpx 28rpx; border-bottom: 1rpx solid #eee; }
+.filters button { flex: 1; background: transparent; border-radius: 0; margin: 0; font-size: 28rpx; }
+.filters .selected { color: #b93434; border-bottom: 3rpx solid #b93434; }
+.ledger-text { flex: 1; min-width: 0; padding-right: 24rpx; }

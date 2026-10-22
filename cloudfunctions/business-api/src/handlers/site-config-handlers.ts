@@ -1,4 +1,4 @@
-import { SITE_CONFIG_KEYS, type SiteConfigKey, type TrustedIdentity } from '../../../../packages/contracts/src';
+import { SITE_CONFIG_KEYS, type SiteConfigKey, type TrustedIdentity, type UpdateSiteConfigPayload } from '../../../../packages/contracts/src/index';
 import { AppError, isRecord } from '../../../../packages/backend/src/errors';
 import type { SiteConfigService } from '../../../../packages/backend/src/services/site-config-service';
 
@@ -17,4 +17,12 @@ export class GetPublicSiteConfigHandler {
 export class GetSiteConfigHandler {
   constructor(private readonly service: SiteConfigService) {}
   async handle(payload: { config_key: SiteConfigKey }, identity: TrustedIdentity): Promise<unknown> { return this.service.getSiteConfig(payload.config_key, identity); }
+}
+export class GetShippingRegionsHandler {
+  constructor(private readonly service: SiteConfigService) {}
+  async handle(): Promise<unknown> { return this.service.getShippingRegions(); }
+}
+export class UpdateSiteConfigHandler {
+  constructor(private readonly service: SiteConfigService) {}
+  async handle(payload: UpdateSiteConfigPayload, identity: TrustedIdentity): Promise<unknown> { return this.service.updateSiteConfig(payload, identity); }
 }

@@ -1,4 +1,4 @@
-import type { DiyMaterials, GetItemPayload, ListDiyMaterialsPayload, ListStandardItemsPayload, Page, StandardCategory, StandardItemDetail, StandardItemSummary, TrustedIdentity } from '../../../contracts/src';
+import type { DiyMaterials, GetItemPayload, ListDiyMaterialsPayload, ListStandardItemsPayload, Page, StandardCategory, StandardItemDetail, StandardItemSummary, TrustedIdentity } from '../../../contracts/src/index';
 import type { CatalogDaos, CategoryRow } from '../catalog/dao';
 import { decodeImages, stockModel } from '../catalog/models';
 import { noImageUrls, selectedImages, type ImageUrlResolver } from '../catalog/images';
@@ -16,13 +16,18 @@ export class CatalogService {
     if (category.catalog_type !== 'STANDARD' || !category.is_enabled) throw new AppError('ITEM_UNAVAILABLE', '分类暂不可用');
     return category;
   }
-  async listStandardCategories(): Promise<{ categories: StandardCategory[] }> {
-    return { categories: (await this.daos.categories.list('STANDARD', true)).map(row => ({ id: row.id, name: row.name, sort_order: row.sort_order })) };
+  async listStandardCategories(): Promise<{ categories: StandardCategory[]; image_urls: Record<string, string> }> {
+    const rows = await this.daos.categories.listPublicSummaries();
+    const categories = rows.map(row => ({ id: row.id, name: row.name, sort_order: row.sort_order, item_count: safeNumber(row.item_count ?? 0), cover_file_id: row.cover_file_id }));
+    return { categories, image_urls: await this.images.resolve(selectedImages(categories.map(row => row.cover_file_id))) };
   }
   async listStandardItems(payload: ListStandardItemsPayload): Promise<Page<StandardItemSummary>> {
-    validateCatalogPayload('listStandardItems', payload); await this.standardCategory(payload.category_id);
-    const scope = JSON.stringify(['standardItems', payload.category_id]);
-    const rows = await this.daos.items.list({ categoryId: payload.category_id, onSale: true, publicStandard: true }, this.tokens.decode(payload.page_token, scope), payload.page_size + 1);
+    validateCatalogPayload('listStandardItems', payload);
+    if (payload.category_id) await this.standardCategory(payload.category_id);
+    const keyword = payload.name_keyword?.trim() || null;
+    const scope = keyword ? JSON.stringify(['standardItems', payload.category_id, keyword]) : JSON.stringify(['standardItems', payload.category_id]);
+    const filter = keyword ? { categoryId: payload.category_id, keyword, onSale: true, publicStandard: true } : { categoryId: payload.category_id, onSale: true, publicStandard: true };
+    const rows = await this.daos.items.list(filter, this.tokens.decode(payload.page_token, scope), payload.page_size + 1);
     const visible = rows.slice(0, payload.page_size); const last = visible.at(-1);
     const items = visible.map(row => ({ item_id: row.id, name: row.name, cover_file_id: this.itemImages(row)[0] ?? null, min_price_cent: row.min_price_cent === null || row.min_price_cent === undefined ? null : safeNumber(row.min_price_cent), has_available_sku: Boolean(row.has_available_sku) }));
     return { items, next_page_token: rows.length > payload.page_size && last ? this.tokens.encode(scope, { id: last.id }) : null, image_urls: await this.images.resolve(selectedImages(items.map(item => item.cover_file_id))) };

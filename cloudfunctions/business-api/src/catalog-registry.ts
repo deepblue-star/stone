@@ -1,4 +1,4 @@
-import type * as C from '../../../packages/contracts/src';
+import type * as C from '../../../packages/contracts/src/index';
 import type { AdminCatalogService } from '../../../packages/backend/src/services/admin-catalog-service';
 import type { CatalogService } from '../../../packages/backend/src/services/catalog-service';
 import type { InventoryService } from '../../../packages/backend/src/services/inventory-service';

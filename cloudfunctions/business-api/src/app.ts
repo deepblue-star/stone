@@ -1,14 +1,25 @@
 import { randomUUID } from 'node:crypto';
-import { jsonSafe, type ErrorCode, type Response, type TrustedIdentity } from '../../../packages/contracts/src';
+import { jsonSafe, type ErrorCode, type Response, type TrustedIdentity } from '../../../packages/contracts/src/index';
 import { AppError, isRecord } from '../../../packages/backend/src/errors';
 import type { SiteConfigService } from '../../../packages/backend/src/services/site-config-service';
 import { createActionRegistry, type RegisteredAction } from './action-registry';
 import type { CatalogServices } from './catalog-registry';
+import type { PointsServices } from './points-registry';
+import type { BuyerServices } from './buyer-registry';
+import { CheckoutChangedError } from '../../../packages/backend/src/services/checkout-service';
+import type { TransactionServices } from './transaction-registry';
+import type { PaymentReconciliationService } from '../../../packages/backend/src/services/payment-reconciliation-service';
+import type { AdminAuditService } from '../../../packages/backend/src/services/admin-audit-service';
 
 export interface RequestLog { action: string; requestId: string; code: 'OK' | ErrorCode; durationMs: number }
 export interface BusinessApiDependencies {
   siteConfigService: SiteConfigService;
   catalogServices?: CatalogServices;
+  pointsServices?: PointsServices;
+  buyerServices?: BuyerServices;
+  transactionServices?: TransactionServices;
+  reconciliationService?: PaymentReconciliationService;
+  adminAuditService?: AdminAuditService;
   actionRegistry?: ReadonlyMap<string, RegisteredAction>;
   resolveIdentity(context?: unknown): Promise<TrustedIdentity>;
   log(entry: RequestLog): void;
@@ -19,7 +30,7 @@ function requestId(context: unknown): string {
   return typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value) ? value : randomUUID();
 }
 export function createBusinessApi(dependencies: BusinessApiDependencies) {
-  const registry = dependencies.actionRegistry ?? createActionRegistry(dependencies.siteConfigService, dependencies.catalogServices);
+  const registry = dependencies.actionRegistry ?? createActionRegistry(dependencies.siteConfigService, dependencies.catalogServices, dependencies.pointsServices, dependencies.buyerServices, dependencies.transactionServices, dependencies.reconciliationService, dependencies.adminAuditService);
   return async (event: unknown, context: unknown): Promise<Response<unknown>> => {
     const start = Date.now();
     const id = requestId(context);
@@ -34,7 +45,9 @@ export function createBusinessApi(dependencies: BusinessApiDependencies) {
       const result = await handler.run(payload, () => dependencies.resolveIdentity(context));
       response = { ok: true, code: 'OK', message: '', data: jsonSafe(result), request_id: id };
     } catch (error) {
-      response = { ok: false, code: error instanceof AppError ? error.code : 'INTERNAL_ERROR', message: error instanceof AppError ? error.message : '系统暂时不可用', data: null, request_id: id };
+      response = error instanceof CheckoutChangedError
+        ? { ok: false, code: 'CHECKOUT_CHANGED', message: error.message, data: jsonSafe(error.quote), request_id: id }
+        : { ok: false, code: error instanceof AppError ? error.code : 'INTERNAL_ERROR', message: error instanceof AppError ? error.message : '系统暂时不可用', data: null, request_id: id };
     }
     dependencies.log({ action, requestId: id, code: response.code, durationMs: Math.max(0, Date.now() - start) });
     return response;

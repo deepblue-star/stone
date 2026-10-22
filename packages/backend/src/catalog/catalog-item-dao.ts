@@ -7,6 +7,10 @@ const itemColumns =
   "CAST(i.id AS CHAR) AS id,CAST(i.category_id AS CHAR) AS category_id,c.catalog_type,i.name,i.description,i.images,i.spec_schema,i.is_on_sale,i.is_deleted,i.updated_at";
 export class CatalogItemDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async findHistoricalByIds(ids: readonly string[]): Promise<readonly ItemRow[]> {
+    if (!ids.length) return [];
+    return this.db.query<ItemRow>(`SELECT ${itemColumns} FROM catalog_items i LEFT JOIN catalog_categories c ON c.id=i.category_id WHERE i.id IN (${placeholders(ids)}) ORDER BY i.id`, ids);
+  }
   async findById(id: string, lock = false): Promise<ItemRow | null> {
     return (
       (

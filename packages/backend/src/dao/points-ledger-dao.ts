@@ -1,6 +1,9 @@
-import type { EntityId } from "../../../contracts/src";
+import type { EntityId } from "../../../contracts/src/index";
 import type { DatabaseExecutor, SqlParameter } from "../db/database";
 import { page } from "./sql";
+import { auditTimeConditions, type AdminAuditCursor, type AdminAuditTimeFilter } from './admin-audit-query';
+export interface AdminPointsLedgerFilter extends AdminAuditTimeFilter { openid?: string; sourceType?: string }
+export interface AdminPointsLedgerRow extends Omit<PointsLedger, 'event_key'> { _openid: string | null }
 export interface PointsLedger {
   id: EntityId;
   account_id: EntityId;
@@ -10,20 +13,24 @@ export interface PointsLedger {
   event_key: string;
   source_ref: string | null;
   description: string;
+  created_at: Date | string;
 }
-export type PointsLedgerInsert = Omit<PointsLedger, "id">;
+export type PointsLedgerInsert = Omit<PointsLedger, "id" | "created_at">;
 export interface PointsLedgerFilter {
+  direction?: 'EARN' | 'SPEND';
   sourceType?: string;
   sourceRef?: string;
 }
 const columns =
-  "CAST(id AS CHAR) AS id, CAST(account_id AS CHAR) AS account_id, CAST(points_delta AS CHAR) AS points_delta, CAST(balance_after AS CHAR) AS balance_after, source_type, event_key, source_ref, description";
+  "CAST(id AS CHAR) AS id, CAST(account_id AS CHAR) AS account_id, CAST(points_delta AS CHAR) AS points_delta, CAST(balance_after AS CHAR) AS balance_after, source_type, event_key, source_ref, description, created_at";
 function filterSql(
   account: string,
   filter: PointsLedgerFilter,
 ): [string, SqlParameter[]] {
   let where = "account_id=? AND is_deleted=0";
   const params: SqlParameter[] = [account];
+  if (filter.direction === 'EARN') where += ' AND points_delta>0';
+  if (filter.direction === 'SPEND') where += ' AND points_delta<0';
   if (filter.sourceType !== undefined) {
     where += " AND source_type=?";
     params.push(filter.sourceType);
@@ -36,11 +43,19 @@ function filterSql(
 }
 export class PointsLedgerDAO {
   constructor(private readonly db: DatabaseExecutor) {}
-  async findByEventKey(key: string): Promise<PointsLedger | null> {
+  async listForAdmin(filter: AdminPointsLedgerFilter, limit: number, before?: AdminAuditCursor): Promise<readonly AdminPointsLedgerRow[]> {
+    let where = 'l.is_deleted=0';
+    const params: SqlParameter[] = [];
+    if (filter.openid !== undefined) { where += ' AND a._openid=?'; params.push(filter.openid); }
+    if (filter.sourceType !== undefined) { where += ' AND l.source_type=?'; params.push(filter.sourceType); }
+    where += auditTimeConditions('l', filter, before, params);
+    return this.db.query<AdminPointsLedgerRow>(`SELECT CAST(l.id AS CHAR) AS id,CAST(l.account_id AS CHAR) AS account_id,a._openid,CAST(l.points_delta AS CHAR) AS points_delta,CAST(l.balance_after AS CHAR) AS balance_after,l.source_type,l.source_ref,l.description,l.created_at FROM points_ledger l LEFT JOIN points_accounts a ON a.id=l.account_id WHERE ${where} ORDER BY l.created_at DESC,l.id DESC LIMIT ?`, [...params, limit]);
+  }
+  async findByEventKey(key: string, lock = false): Promise<PointsLedger | null> {
     return (
       (
         await this.db.query<PointsLedger>(
-          `SELECT ${columns} FROM points_ledger WHERE event_key = ? AND is_deleted = 0 LIMIT 1`,
+          `SELECT ${columns} FROM points_ledger WHERE event_key = ? AND is_deleted = 0 LIMIT 1${lock ? ' FOR UPDATE' : ''}`,
           [key],
         )
       )[0] ?? null

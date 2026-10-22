@@ -1,0 +1,2 @@
+@import "../../styles/alpha.wxss";
+.qr { width: 100%; height: 480rpx; margin: 32rpx 0; }

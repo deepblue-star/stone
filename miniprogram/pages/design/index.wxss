@@ -1,0 +1,2 @@
+@import "../designs/commerce.wxss";
+.estimate-note { margin-bottom: 16rpx; line-height: 1.6; }

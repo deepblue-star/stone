@@ -1,0 +1,9 @@
+<view class="screen"><navigation-bar title="积分与兑换" back="{{true}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="section"><view class="muted">当前积分</view><view class="balance">{{center?center.balance:'—'}}</view><view class="muted">用于兑换 DIY 免费珠子</view></view>
+    <view class="section"><button class="primary {{submitting||!center||center.checked_in_today?'is-disabled':''}}" disabled="{{submitting||!center||center.checked_in_today}}" bindtap="checkIn">{{submitting?'正在签到…':center&&center.checked_in_today?'今日已签到':'每日签到'}}</button></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view class="section"><button class="secondary" bindtap="mall">积分商城 ›</button><button class="secondary next" bindtap="ledger">查看积分明细 ›</button><button class="secondary next" bindtap="invite">邀请好友攒积分 ›</button></view>
+    <view class="section"><view>最近积分记录</view><view wx:if="{{center&&!center.recent_ledger.length}}" class="empty">暂无积分记录</view><view wx:for="{{center.recent_ledger}}" wx:key="index" class="list-row row between"><view><view>{{item.description}}</view><view class="muted">{{item.timeText}}</view></view><text>{{item.pointsText}}</text></view></view>
+  </scroll-view>
+</view>

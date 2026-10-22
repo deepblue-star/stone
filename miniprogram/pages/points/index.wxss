@@ -1,0 +1,3 @@
+@import "../../styles/alpha.wxss";
+.balance { font-size: 72rpx; line-height: 1.8; font-weight: 600; }
+.next { margin-top: 20rpx; }

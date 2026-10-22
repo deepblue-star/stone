@@ -1,0 +1,15 @@
+<view class="screen">
+  <navigation-bar title="{{title}}" back="{{true}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more">
+    <view class="search-row row"><input value="{{keyword}}" placeholder="搜索商品" maxlength="160" confirm-type="search" bindinput="input" bindconfirm="search" /><button bindtap="search">搜索</button></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{loading&&!items.length}}" class="empty">正在读取商品…</view>
+    <view wx:elif="{{!items.length&&!error}}" class="empty">没有找到符合条件的商品</view>
+    <view class="product-list"><view wx:for="{{items}}" wx:key="item_id" class="product-row row" data-id="{{item.item_id}}" bindtap="openItem" aria-role="button" aria-label="{{item.name}}">
+      <view class="product-info"><view class="muted">标准商品</view><view class="product-name">{{item.name}}</view><view class="price">{{item.priceText}}</view><view class="buy-link">{{item.has_available_sku?'现在购买 ›':'暂时缺货'}}</view></view>
+      <image wx:if="{{item.coverUrl}}" src="{{item.coverUrl}}" mode="aspectFill" lazy-load /><view wx:else class="product-placeholder">暂无图片</view>
+    </view></view>
+    <button wx:if="{{nextPage}}" class="secondary more {{loading?'is-disabled':''}}" bindtap="more" disabled="{{loading}}">{{loading?'正在读取…':'加载更多'}}</button>
+    <view wx:elif="{{items.length}}" class="empty">已加载全部商品</view>
+  </scroll-view>
+</view>

@@ -1,0 +1,9 @@
+<view class="screen">
+  <navigation-bar title="我的订单" back="{{true}}" color="#242424" background="#ffffff"/>
+  <scroll-view class="order-filter-scroll" scroll-x><view class="filters"><button wx:for="{{filters}}" wx:key="status" data-status="{{item.status}}" bindtap="filter" disabled="{{loading}}" class="filter {{item.status === status ? 'active' : ''}} {{loading ? 'is-disabled' : ''}}">{{item.name}}</button></view></scroll-view>
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading ? 'is-disabled' : ''}}" bindtap="load" disabled="{{loading}}">重新读取</button></view>
+    <view wx:if="{{loading && !items.length}}" class="empty">正在读取订单…</view><view wx:elif="{{!loading && !items.length && !error}}" class="empty">暂无此状态的订单</view>
+    <view class="section"><view wx:for="{{items}}" wx:key="order_no" class="list-row" data-id="{{item.order_no}}" bindtap="detail" aria-role="button"><view class="row between"><text class="order-number">{{item.order_no}}</text><text class="link">{{item.statusText}}</text></view><view class="item-name">{{item.item_summary}}</view><view class="item-note">{{item.timeText}}</view><view wx:if="{{item.status === 'PENDING_PAYMENT'}}" class="item-note">付款截止：{{item.deadlineText}}</view><view class="row between"><text class="price">订单金额 ¥{{item.amountText}}</text><text class="chevron">›</text></view></view><button wx:if="{{next}}" class="secondary {{loading ? 'is-disabled' : ''}}" bindtap="more" disabled="{{loading}}" loading="{{loading}}">加载更多</button></view>
+  </scroll-view>
+</view>

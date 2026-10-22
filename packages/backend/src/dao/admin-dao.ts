@@ -1,4 +1,4 @@
-import type { Admin } from "../../../contracts/src";
+import type { Admin } from "../../../contracts/src/index";
 import type { DatabaseExecutor, SqlParameter } from "../db/database";
 import { page } from "./sql";
 import type { RowMetadata } from "./types";

@@ -1,4 +1,4 @@
-import type { TrustedIdentity } from '../../../packages/contracts/src';
+import type { TrustedIdentity } from '../../../packages/contracts/src/index';
 import { isRecord } from '../../../packages/backend/src/errors';
 
 /** These readers are SDK calls bound to runtime context, never event/context fields. */
@@ -15,19 +15,22 @@ export function resolveTrustedIdentity(readers: RuntimeIdentityReaders): Trusted
   return { kind: 'anonymous' };
 }
 export interface ContextIdentityReaders extends RuntimeIdentityReaders {
-  getCloudBaseContext(context: unknown): { TCB_UUID?: string; WX_OPENID?: string; TCB_ISANONYMOUS_USER?: string };
+  parseInvocationContext(context: unknown): { environment?: unknown; environ?: unknown };
 }
 export function resolveInvocationIdentity(context: unknown, readers: ContextIdentityReaders): TrustedIdentity {
-  if (!isRecord(context) || !((typeof context.environment === 'string' && context.environment.length > 0) || (typeof context.environ === 'string' && context.environ.length > 0))) return resolveTrustedIdentity(readers);
+  if (!isRecord(context) || !('environment' in context || 'environ' in context)) return resolveTrustedIdentity(readers);
+  if (!((typeof context.environment === 'string' && context.environment.length > 0) || (typeof context.environ === 'string' && context.environ.length > 0))) return { kind: 'anonymous' };
   let user: ReturnType<RuntimeIdentityReaders['getCloudBaseUserInfo']>;
   try {
-    // Official node-sdk 3.18.7 getCloudbaseContext(context) parses environment/environ;
-    // getUserInfo() omits that argument and can miss request-local caller fields.
-    const parsed = readers.getCloudBaseContext(context);
-    user = { uid: parsed.TCB_UUID, openId: parsed.WX_OPENID, isAnonymous: parsed.TCB_ISANONYMOUS_USER === 'true' };
+    // Official parseContext reads this invocation only. getCloudbaseContext also merges
+    // process.env, which can retain a different caller on a reused function instance.
+    const envelope = readers.parseInvocationContext(context);
+    const fields = envelope.environment ?? envelope.environ;
+    if (!isRecord(fields)) return { kind: 'anonymous' };
+    const parsed = fields;
+    user = { uid: typeof parsed.TCB_UUID === 'string' ? parsed.TCB_UUID : undefined, openId: typeof parsed.WX_OPENID === 'string' ? parsed.WX_OPENID : undefined, isAnonymous: parsed.TCB_ISANONYMOUS_USER === 'true' };
   } catch {
-    // Unsupported/malformed runtime context retains the original SDK reader path.
-    return resolveTrustedIdentity(readers);
+    return { kind: 'anonymous' };
   }
-  return resolveTrustedIdentity({ getWechatContext: () => readers.getWechatContext(), getCloudBaseUserInfo: () => user });
+  return resolveTrustedIdentity({ getWechatContext: () => ({}), getCloudBaseUserInfo: () => user });
 }

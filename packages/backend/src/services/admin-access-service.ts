@@ -1,5 +1,5 @@
-import type { Admin, TrustedIdentity } from '../../../contracts/src';
-import type { AdminDAO } from '../dao';
+import type { Admin, TrustedIdentity } from '../../../contracts/src/index';
+import type { AdminDAO } from '../dao/index';
 import { AppError } from '../errors';
 
 export class AdminAccessService {

@@ -1,0 +1,14 @@
+<view class="screen">
+  <navigation-bar title="DIY" back="{{false}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="section"><view class="page-title">开始您的手串设计之旅</view><view class="muted">选择已有设计，或从零开始</view></view>
+    <view class="design-heading row between"><text>我的设计</text><text class="link" bindtap="more" aria-role="button">更多 ›</text></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{loading&&!designs.length}}" class="empty">正在读取设计…</view>
+    <view wx:elif="{{!designs.length&&!error}}" class="empty">还没有保存的设计，可以从下方开始定制</view>
+    <scroll-view wx:if="{{designs.length}}" class="recent-scroll" scroll-x><view class="recent-row row">
+      <view wx:for="{{designs}}" wx:key="design_id" class="design-card"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFit" /><view wx:else class="design-placeholder">设计预览</view><view class="design-name">{{item.name}}</view><view class="muted date">{{item.dateText}}</view><button class="secondary" data-id="{{item.current_design_version_id}}" bindtap="edit">继续设计</button></view>
+    </view></scroll-view>
+    <view class="section"><button class="custom-entry" bindtap="create"><view class="custom-title">手串定制</view><view class="muted">从零开始，选择珠子和配件</view></button></view>
+  </scroll-view>
+</view>

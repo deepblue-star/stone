@@ -1,0 +1,7 @@
+@import "../designs/commerce.wxss";
+.cart-toolbar { flex-shrink: 0; padding: 20rpx 32rpx 0; }
+.cart-checkout-row { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16rpx; }
+.cart-total { flex: 1; min-width: 0; }
+.cart-checkout-row .primary { flex: 0 0 auto; width: auto; margin-left: 0; margin-right: 0; white-space: nowrap; padding: 0 28rpx; }
+.cart-price-parts { margin-top: 12rpx; line-height: 1.6; }
+.cart-price-breakdown { display: flex; flex-direction: row; flex-wrap: wrap; gap: 4rpx; }

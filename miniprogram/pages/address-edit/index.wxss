@@ -1,0 +1,6 @@
+@import "../designs/commerce.wxss";
+.group-title { padding: 24rpx 32rpx; background: #f6f6f6; font-size: 28rpx; }
+.field-row { display: flex; flex-direction: row; align-items: center; min-height: 64rpx; }
+.field-row .label { width: 150rpx; flex-shrink: 0; margin: 0 20rpx 0 0; }
+.field-row input { flex: 1; min-width: 0; text-align: right; font-size: 27rpx; }
+.field-row picker { flex: 1; min-width: 0; text-align: right; font-size: 26rpx; }

@@ -1,0 +1,15 @@
+<view class="screen">
+  <navigation-bar title="首页" back="{{false}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="brand"><view class="brand-name">Stone</view><view class="muted">手串定制</view></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <swiper wx:if="{{banners.length}}" class="banner" indicator-dots="{{banners.length>1}}">
+      <swiper-item wx:for="{{banners}}" wx:key="displayKey"><image class="banner-image" wx:if="{{item.url}}" src="{{item.url}}" mode="aspectFill" data-index="{{index}}" data-url="{{item.url}}" bindtap="bannerTap" binderror="bannerImageError" /><view wx:else class="banner-missing">{{bannerError||'图片暂不可用'}}</view></swiper-item>
+    </swiper>
+    <view class="home-links row">
+      <button class="home-entry" data-key="DIY" bindtap="enter"><image wx:if="{{entryImages.DIY}}" class="entry-image" src="{{entryImages.DIY}}" mode="aspectFit" data-key="DIY" data-url="{{entryImages.DIY}}" binderror="entryImageError" /><view wx:else class="entry-missing">{{loading?'正在读取图片…':entryImageErrors.DIY?'图片暂不可用':'暂无图片'}}</view><view>设计手串</view></button>
+      <button class="home-entry" data-key="STANDARD" bindtap="enter"><image wx:if="{{entryImages.STANDARD}}" class="entry-image" src="{{entryImages.STANDARD}}" mode="aspectFit" data-key="STANDARD" data-url="{{entryImages.STANDARD}}" binderror="entryImageError" /><view wx:else class="entry-missing">{{loading?'正在读取图片…':entryImageErrors.STANDARD?'图片暂不可用':'暂无图片'}}</view><view>好物</view></button>
+    </view>
+    <view class="section"><button class="secondary" bindtap="contact">联系客服</button></view>
+  </scroll-view>
+</view>

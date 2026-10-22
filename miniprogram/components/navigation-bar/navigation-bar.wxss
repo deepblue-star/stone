@@ -28,6 +28,7 @@
 }
 
 .weui-navigation-bar__left {
+  flex-shrink: 0;
   position: relative;
   padding-left: var(--left);
   display: flex;
@@ -64,6 +65,8 @@
 }
 
 .weui-navigation-bar__center {
+  min-width: 0;
+  overflow: hidden;
   font-size: 17px;
   text-align: center;
   position: relative;
@@ -74,6 +77,15 @@
   font-weight: bold;
   flex: 1;
   height: 100%;
+}
+
+.weui-navigation-bar__title {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .weui-navigation-bar__loading {

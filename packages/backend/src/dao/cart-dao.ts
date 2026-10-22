@@ -17,6 +17,7 @@ const columns =
   "CAST(id AS CHAR) AS id,_openid,item_type,CAST(sku_id AS CHAR) AS sku_id,CAST(design_version_id AS CHAR) AS design_version_id,quantity,created_at,updated_at,is_deleted";
 export class CartDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async countByOwner(openid: string): Promise<string> { return (await this.db.query<{ count: string }>('SELECT CAST(COUNT(*) AS CHAR) AS count FROM cart_items WHERE _openid=? AND is_deleted=0', [openid]))[0]?.count ?? '0'; }
   async insert(input: CartInsert): Promise<string> {
     return (
       await this.db.execute(

@@ -11,6 +11,8 @@
 - `database/migrations/`：带版本的数据库结构 SQL。
 - `docs/progress/foundation.md`：实际步骤和验证状态；未验证项不能视为已完成。
 
+后端源码导入目录入口时显式写到 `index`，例如 `packages/contracts/src/index`、`dao/index`。项目构建使用 Bundler 模块解析，但微信开发者工具的编辑器可能以不同方式检查云函数源码；显式入口保持两者兼容，不使用忽略诊断来隐藏问题。公共底座与 Alpha 交接的当前核查见 [2026-10-22 基座核查](progress/foundation-readiness-2026-10-22.md)。
+
 ## 首次启动
 
 1. 安装 Node.js 24 LTS、Git、微信开发者工具，以及 CloudBase CLI 3.8.6。

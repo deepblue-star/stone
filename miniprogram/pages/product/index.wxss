@@ -1,4 +1,12 @@
 @import "../../styles/catalog.wxss";
+.product-footer { flex-shrink: 0; padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom)); background: #fff; border-top: 1rpx solid #eee; }
+.product-actions { display: flex; flex-direction: row; gap: 12rpx; align-items: center; }
+.product-actions button { width: auto; min-width: 0; margin: 0; font-size: 26rpx; padding: 0 10rpx; border-radius: 12rpx; white-space: nowrap; }
+.product-actions button.is-disabled { background: #eee; color: #666; opacity: 1; }
+.service-action { flex: 0 0 80rpx; flex-shrink: 0; background: #fff; color: #333; }
+.cart-action { flex: 0 0 200rpx; background: #f3f3f3; color: #333; }
+.buy-action { flex: 1; background: #b93434; color: white; }
+.purchase-error { padding: 10rpx 0 20rpx; color: #a52b2b; font-size: 25rpx; }
 .detail-photo {
   width: 100%;
   height: 660rpx;
@@ -6,6 +14,10 @@
   position: relative;
 }
 .detail-photo image {
+  width: 100%;
+  height: 100%;
+}
+.detail-gallery {
   width: 100%;
   height: 100%;
 }
@@ -20,7 +32,7 @@
 .photo-hint {
   position: absolute;
   right: 24rpx;
-  bottom: 24rpx;
+  bottom: 48rpx;
   font-size: 21rpx;
   color: #405b4d;
   background: #fffffff0;
@@ -29,6 +41,14 @@
 }
 .product-content {
   padding: 32rpx;
+}
+.detail-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24rpx;
+  margin-bottom: 16rpx;
 }
 .detail-price {
   display: flex;
@@ -43,10 +63,18 @@
   margin-right: 6rpx;
 }
 .detail-name {
+  flex: 1;
+  min-width: 0;
   font-size: 38rpx;
   font-weight: 600;
   line-height: 1.6;
-  margin-top: 10rpx;
+  overflow-wrap: break-word;
+}
+.detail-type {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: #777;
 }
 .detail-stock {
   font-size: 25rpx;
@@ -76,30 +104,35 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
   gap: 16rpx;
   margin-bottom: 20rpx;
 }
-.spec-chip {
-  min-width: 144rpx;
+.spec-options .spec-chip {
+  width: auto;
+  flex: 0 0 auto;
+  min-width: 108rpx;
   max-width: 100%;
   font-size: 25rpx;
-  white-space: normal;
-  padding: 18rpx 24rpx;
+  white-space: nowrap;
+  min-height: 72rpx;
+  padding: 12rpx 24rpx;
   margin: 0;
-  border: 2rpx solid #d1dcd0;
+  border: 2rpx solid #ddd;
   border-radius: 12rpx;
   background: #fff;
-  color: #40594c;
+  color: #333;
 }
 .spec-chip.selected {
-  border-color: #285c4d;
-  background: #e5eee5;
-  color: #285c4d;
+  border-color: #b93434;
+  background: #fff;
+  color: #b93434;
 }
-.spec-chip.is-disabled {
-  color: #687369;
-  background: #efefe9;
-  opacity: 0.75;
+.spec-options .spec-chip.is-disabled {
+  color: #666;
+  background: #eee;
+  opacity: 1;
 }
 .spec-chip text {
   font-size: 22rpx;
@@ -129,6 +162,7 @@
   border-radius: 10rpx;
   margin: 0;
 }
+.quantity-controls button.is-disabled { background: #eee; color: #666; opacity: 1; }
 .quantity-controls > text {
   min-width: 38rpx;
   text-align: center;

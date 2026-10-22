@@ -39,10 +39,22 @@ export interface ReconciliationIssueFilter {
   orderId?: string;
   outTradeNo?: string;
 }
+export interface AdminReconciliationIssueFilter { billDate?: string; issueType?: ReconciliationIssueType; resolutionStatus?: ResolutionStatus }
+export interface AdminReconciliationIssueRow extends ReconciliationIssueRow { bill_date: string }
 const columns =
   "CAST(id AS CHAR) AS id,CAST(run_id AS CHAR) AS run_id,issue_type,CAST(order_id AS CHAR) AS order_id,order_no,out_trade_no,transaction_id,local_status,wechat_trade_state,CAST(local_amount_cent AS CHAR) AS local_amount_cent,CAST(wechat_amount_cent AS CHAR) AS wechat_amount_cent,resolution_status,resolution_note,resolved_by,resolved_at,created_at,updated_at,is_deleted";
 export class PaymentReconciliationIssueDAO {
   constructor(private readonly db: DatabaseExecutor) {}
+  async listForAdmin(filter: AdminReconciliationIssueFilter = {}, limit = 50, before?: { createdAt: Date; id: string }): Promise<readonly AdminReconciliationIssueRow[]> {
+    const predicates = ['i.is_deleted=0', 'r.is_deleted=0'];
+    const values: SqlParameter[] = [];
+    if (filter.billDate !== undefined) { predicates.push('r.bill_date=?'); values.push(filter.billDate); }
+    if (filter.issueType !== undefined) { predicates.push('i.issue_type=?'); values.push(filter.issueType); }
+    if (filter.resolutionStatus !== undefined) { predicates.push('i.resolution_status=?'); values.push(filter.resolutionStatus); }
+    if (before) { predicates.push('(i.created_at < ? OR (i.created_at = ? AND i.id < ?))'); values.push(before.createdAt, before.createdAt, before.id); }
+    const selected = 'CAST(i.id AS CHAR) AS id,CAST(i.run_id AS CHAR) AS run_id,CAST(r.bill_date AS CHAR) AS bill_date,i.issue_type,CAST(i.order_id AS CHAR) AS order_id,i.order_no,i.out_trade_no,i.transaction_id,i.local_status,i.wechat_trade_state,CAST(i.local_amount_cent AS CHAR) AS local_amount_cent,CAST(i.wechat_amount_cent AS CHAR) AS wechat_amount_cent,i.resolution_status,i.resolution_note,i.resolved_by,i.resolved_at,i.created_at,i.updated_at,i.is_deleted';
+    return this.db.query<AdminReconciliationIssueRow>(`SELECT ${selected} FROM payment_reconciliation_issues i JOIN payment_reconciliation_runs r ON r.id=i.run_id WHERE ${predicates.join(' AND ')} ORDER BY i.created_at DESC,i.id DESC LIMIT ?`, [...values, page(limit, 0)[0]!]);
+  }
   async insert(v: ReconciliationIssueInsert): Promise<string> {
     return (
       await this.db.execute(
@@ -108,7 +120,7 @@ export class PaymentReconciliationIssueDAO {
     return (
       (
         await this.db.query<{ count: string }>(
-          `SELECT CAST(COUNT(*) AS CHAR) AS count FROM payment_reconciliation_issues WHERE resolution_status=? AND is_deleted=0${runId !== undefined ? " AND run_id=?" : ""}`,
+          `SELECT CAST(COUNT(*) AS CHAR) AS count FROM payment_reconciliation_issues i JOIN payment_reconciliation_runs r ON r.id=i.run_id WHERE i.resolution_status=? AND i.is_deleted=0 AND r.is_deleted=0${runId !== undefined ? " AND i.run_id=?" : ""}`,
           runId !== undefined ? ["OPEN", runId] : ["OPEN"],
         )
       )[0]?.count ?? "0"

@@ -84,13 +84,14 @@ const fields: Record<string, readonly string[]> = {
   adjustInventory: ['operation_key', 'sku_id', 'stock_delta', 'remark'], listInventoryMovements: ['sku_id', 'page_token', 'page_size'], listStandardCategories: [], listStandardItems: ['category_id', 'page_token', 'page_size'], getStandardItemDetail: ['item_id'], listDiyMaterials: ['catalog_type', 'category_id'],
 };
 export function validateCatalogPayload(action: string, payload: unknown): Record<string, unknown> {
-  const allowed = fields[action];
+  const required = fields[action];
+  const allowed = action === 'listStandardItems' ? [...(required ?? []), 'name_keyword'] : required;
   if (!allowed || !isRecord(payload)) return invalid();
   const value = action === 'listDiyMaterials' && payload.category_id === undefined ? { ...payload, category_id: null } : payload;
-  if (Object.keys(value).length !== allowed.length || Object.keys(value).some(key => !allowed.includes(key))) return invalid('必须完整提交所有字段');
+  if (!required || required.some(key => !(key in value)) || Object.keys(value).some(key => !allowed.includes(key))) return invalid('必须完整提交所有字段');
   for (const [key, field] of Object.entries(value)) {
     if (key.endsWith('_id') && key !== 'image_file_id') {
-      const nullable = (action === 'saveCatalogSku' && key === 'sku_id') || (action === 'saveCatalogItem' && key === 'item_id') || (action === 'saveCategory' && key === 'category_id') || action === 'listAdminItems' || action === 'listDiyMaterials';
+      const nullable = (action === 'saveCatalogSku' && key === 'sku_id') || (action === 'saveCatalogItem' && key === 'item_id') || (action === 'saveCategory' && key === 'category_id') || action === 'listAdminItems' || action === 'listDiyMaterials' || action === 'listStandardItems';
       if (!(id(field) || (nullable && field === null))) return invalid(`${key}无效`);
     } else if (key === 'catalog_type') { if (!((typeof field === 'string' && ['BEAD', 'ACCESSORY', 'STANDARD'].includes(field)) || (action === 'listAdminCategories' && field === null)) || (action === 'listDiyMaterials' && field !== 'BEAD' && field !== 'ACCESSORY')) return invalid(); }
     else if (key === 'page_size') { if (!integer(field, 1, 100)) return invalid(); }

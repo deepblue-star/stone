@@ -1,0 +1,7 @@
+@import "../../styles/alpha.wxss";
+.invite-card { margin: 0 28rpx; padding: 28rpx; background: #faf2f0; border: 1rpx solid #eedad5; border-radius: 12rpx; }
+.invite-code { gap: 28rpx; margin: 20rpx 0; }
+.invite-code text { font-size: 80rpx; font-weight: 600; letter-spacing: 6rpx; }
+.invite-code button { margin: 0; flex-shrink: 0; }
+.menu-list { padding: 0 32rpx 32rpx; }
+.menu-text { flex: 1; }

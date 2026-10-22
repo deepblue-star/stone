@@ -1,12 +1,41 @@
 {
   "pages": [
+    "pages/home/index",
     "pages/catalog/index",
+    "pages/diy/index",
+    "pages/profile/index",
+    "pages/products/index",
+    "pages/points/index",
+    "pages/points-ledger/index",
+    "pages/points-mall/index",
+    "pages/coupons/index",
+    "pages/invite/index",
+    "pages/contact/index",
+    "pages/editor/index",
     "pages/product/index",
+    "pages/designs/index",
+    "pages/design/index",
+    "pages/cart/index",
+    "pages/addresses/index",
+    "pages/address-edit/index",
+    "pages/checkout/index",
+    "pages/orders/index",
+    "pages/order/index",
+    "pages/terms/index",
     "pages/materials/index",
     "pages/foundation/index",
     "pages/index/index",
     "pages/logs/logs"
   ],
+  "tabBar": {
+    "color": "#777777", "selectedColor": "#b93434", "backgroundColor": "#ffffff", "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/home/index", "text": "首页" },
+      { "pagePath": "pages/catalog/index", "text": "好物" },
+      { "pagePath": "pages/diy/index", "text": "DIY" },
+      { "pagePath": "pages/profile/index", "text": "我的" }
+    ]
+  },
   "window": {
     "navigationBarTextStyle": "black",
     "navigationStyle": "custom"

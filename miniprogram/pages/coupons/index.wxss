@@ -1,0 +1,8 @@
+@import "../../styles/alpha.wxss";
+.filters { border-bottom: 1rpx solid #eee; padding: 0 12rpx; }
+.filters button { flex: 1; margin: 0; font-size: 24rpx; padding: 8rpx; background: transparent; border-radius: 0; }
+.filters .selected { color: #b93434; border-bottom: 3rpx solid #b93434; }
+.coupon-row { padding: 28rpx 0; border-bottom: 1rpx solid #eee; align-items: flex-start; gap: 20rpx; }
+.coupon-row image { width: 160rpx; height: 160rpx; flex-shrink: 0; }
+.coupon-info { flex: 1; min-width: 0; line-height: 1.8; }
+.coupon-info button { margin-top: 12rpx; }

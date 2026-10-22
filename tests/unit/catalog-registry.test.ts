@@ -12,7 +12,7 @@ describe('catalog business-api registration', () => {
   }
   it('registers named catalog capabilities and preserves the original actions', () => {
     const f = fixture(); const actions = createActionRegistry(f.site, f.services);
-    expect([...actions.keys()]).toEqual(['getPublicSiteConfig', 'getSiteConfig', 'listAdminCategories', 'listAdminItems', 'getAdminCatalogItem', 'saveCategory', 'saveCatalogItem', 'saveCatalogSku', 'previewSkuDeactivation', 'deleteCategory', 'deleteCatalogItem', 'deleteCatalogSku', 'adjustInventory', 'listInventoryMovements', 'listStandardCategories', 'listStandardItems', 'getStandardItemDetail', 'listDiyMaterials']);
+    expect([...actions.keys()]).toEqual(['getPublicSiteConfig', 'getSiteConfig', 'getShippingRegions', 'updateSiteConfig', 'listAdminCategories', 'listAdminItems', 'getAdminCatalogItem', 'saveCategory', 'saveCatalogItem', 'saveCatalogSku', 'previewSkuDeactivation', 'deleteCategory', 'deleteCatalogItem', 'deleteCatalogSku', 'adjustInventory', 'listInventoryMovements', 'listStandardCategories', 'listStandardItems', 'getStandardItemDetail', 'listDiyMaterials']);
   });
   it('public catalog reads never require identity and admin handlers receive only resolved identity', async () => {
     const f = fixture(); const identity = vi.fn(async () => ({ kind: 'web' as const, uid: 'trusted' }));

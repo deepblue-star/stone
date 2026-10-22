@@ -572,7 +572,7 @@ describe("complete executor-bound DAO foundation", () => {
       "addresses",
       "listByOwner",
       [hostile, 10, 20],
-      /WHERE _openid=\? AND is_deleted=0 ORDER BY is_default DESC,id DESC LIMIT \? OFFSET \?$/,
+      /WHERE _openid=\? AND is_deleted=0 ORDER BY is_default DESC,updated_at DESC,id DESC LIMIT \? OFFSET \?$/,
       [hostile, 10, 20],
     ],
     [
@@ -902,7 +902,7 @@ describe("complete executor-bound DAO foundation", () => {
       "paymentReconciliationIssues",
       "countUnresolved",
       [big],
-      /WHERE resolution_status=\? AND is_deleted=0 AND run_id=\?$/,
+      /JOIN payment_reconciliation_runs r ON r.id=i.run_id WHERE i.resolution_status=\? AND i.is_deleted=0 AND r.is_deleted=0 AND i.run_id=\?$/,
       ["OPEN", big],
     ],
     [

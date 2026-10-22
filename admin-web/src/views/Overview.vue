@@ -40,7 +40,7 @@ onMounted(refresh);
       <h2>商家工作台</h2>
       <nav>
         <RouterLink to="/catalog">商品与库存</RouterLink
-        ><span aria-current="page">联通检查</span>
+        ><RouterLink to="/orders">订单履约</RouterLink><RouterLink to="/audit">会员权益</RouterLink><RouterLink to="/settings">站点配置</RouterLink><span aria-current="page">联通检查</span>
       </nav>
       <button class="secondary" @click="logout">退出登录</button>
     </aside>

@@ -1,4 +1,4 @@
-import type { TrustedIdentity } from '../../../contracts/src';
+import type { TrustedIdentity } from '../../../contracts/src/index';
 import { AppError } from '../errors';
 import type { ImageUrlResolver } from './images';
 import { selectedImages } from './images';

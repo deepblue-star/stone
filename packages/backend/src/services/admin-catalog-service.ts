@@ -1,4 +1,4 @@
-import type { AdminCatalogItem, AdminCategory, AdminItemSummary, DeleteCatalogItemPayload, DeleteCatalogSkuPayload, DeleteCategoryPayload, GetItemPayload, ListAdminCategoriesPayload, ListAdminItemsPayload, Page, PreviewSkuDeactivationPayload, SaveCatalogItemPayload, SaveCatalogSkuPayload, SaveCategoryPayload, SkuDeactivationPreview, SkuDeactivationResult, TrustedIdentity } from '../../../contracts/src';
+import type { AdminCatalogItem, AdminCategory, AdminItemSummary, DeleteCatalogItemPayload, DeleteCatalogSkuPayload, DeleteCategoryPayload, GetItemPayload, ListAdminCategoriesPayload, ListAdminItemsPayload, Page, PreviewSkuDeactivationPayload, SaveCatalogItemPayload, SaveCatalogSkuPayload, SaveCategoryPayload, SkuDeactivationPreview, SkuDeactivationResult, TrustedIdentity } from '../../../contracts/src/index';
 import type { CatalogDaos, CategoryRow, SkuRow } from '../catalog/dao';
 import { categoryModel, itemModel, skuModel } from '../catalog/models';
 import { noImageUrls, selectedImages, type ImageUrlResolver } from '../catalog/images';

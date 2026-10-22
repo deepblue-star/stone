@@ -1,0 +1,27 @@
+page { background: #fff; color: #242424; font-size: 28rpx; }
+.screen { height: 100vh; display: flex; flex-direction: column; background: #fff; }
+.page-scroll { flex: 1; height: 0; min-height: 0; }
+.section { padding: 32rpx; }
+.page-title { font-size: 40rpx; font-weight: 600; line-height: 1.5; }
+.muted { color: #777; font-size: 25rpx; line-height: 1.6; }
+.row { display: flex; flex-direction: row; align-items: center; }
+.between { justify-content: space-between; }
+.search-row { margin: 24rpx 28rpx; padding: 10rpx 20rpx; background: #f4f4f4; border-radius: 12rpx; }
+.search-row input { flex: 1; height: 72rpx; min-width: 0; }
+.search-row button { flex-shrink: 0; margin: 0; padding: 0 16rpx; font-size: 26rpx; background: transparent; color: #b93434; }
+button::after { border: 0; }
+.primary { background: #b93434; color: white; border-radius: 12rpx; font-size: 29rpx; }
+.secondary { background: #f3f3f3; color: #333; border-radius: 12rpx; font-size: 27rpx; }
+.screen button.is-disabled { color: #666; background: #eee; opacity: 1; }
+.empty, .error-box { padding: 64rpx 32rpx; text-align: center; line-height: 1.8; color: #777; }
+.error-box { color: #a52b2b; }
+.error-box button, .empty button { margin-top: 24rpx; }
+.price { color: #b93434; font-size: 32rpx; }
+.divider { height: 16rpx; background: #f6f6f6; }
+.footer { flex-shrink: 0; padding: 16rpx 28rpx calc(16rpx + env(safe-area-inset-bottom)); background: #fff; border-top: 1rpx solid #eee; }
+.field { padding: 24rpx 0; border-bottom: 1rpx solid #eee; }
+.field input { height: 64rpx; }
+.label { display: block; font-size: 26rpx; margin-bottom: 10rpx; }
+.list-row { padding: 30rpx 0; border-bottom: 1rpx solid #eee; }
+.chevron { color: #999; font-size: 36rpx; margin-left: 18rpx; }
+.link { color: #b93434; }

@@ -1,0 +1,10 @@
+@import "../../styles/alpha.wxss";
+.brand { padding: 44rpx 32rpx 36rpx; }
+.brand-name { font-size: 56rpx; font-weight: 600; line-height: 1.5; }
+.banner { height: 280rpx; margin: 0 28rpx 28rpx; border-radius: 12rpx; overflow: hidden; }
+.banner-image { width: 100%; height: 100%; }
+.banner-missing { height: 100%; display: flex; align-items: center; justify-content: center; color: #777; background: #f4f4f4; font-size: 26rpx; }
+.home-links { padding: 0 28rpx; gap: 20rpx; }
+.screen button.home-entry { flex: 1; width: 0; min-width: 0; margin: 0; padding: 36rpx 16rpx; display: flex; flex-direction: column; align-items: center; background: #f6f6f6; color: #242424; border: 1rpx solid #eee; border-radius: 12rpx; font-size: 34rpx; font-weight: 500; line-height: 1.8; box-sizing: border-box; }
+.entry-image, .entry-missing { width: 100%; height: 180rpx; margin-bottom: 20rpx; }
+.entry-missing { display: flex; align-items: center; justify-content: center; font-size: 24rpx; color: #777; font-weight: 400; }

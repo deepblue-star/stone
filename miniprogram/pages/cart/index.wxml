@@ -1,0 +1,18 @@
+<view class="screen">
+  <navigation-bar title="购物车" back="{{true}}" color="#242424" background="#ffffff"/>
+  <view class="row between cart-toolbar"><view class="row"><checkbox checked="{{allSelected}}" bindtap="toggleAll" disabled="{{submitting || !items.length}}" color="#b93434"/><text>全选</text></view><button class="small-button secondary {{submitting || !count ? 'is-disabled' : ''}}" bindtap="removeSelected" disabled="{{submitting || !count}}">删除所选</button></view>
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading || submitting ? 'is-disabled' : ''}}" bindtap="load" disabled="{{loading || submitting}}">重新读取</button></view>
+    <view wx:if="{{loading && !items.length}}" class="empty">正在读取购物车…</view>
+    <view wx:elif="{{!loading && !items.length && !error}}" class="empty">购物车还是空的</view>
+    <view class="section">
+      <view wx:for="{{items}}" wx:key="cart_item_id" class="list-row">
+        <view class="row"><checkbox class="select-checkbox" checked="{{item.checked}}" disabled="{{!item.purchasable || submitting}}" data-id="{{item.cart_item_id}}" bindtap="toggle" color="#b93434" aria-label="选择{{item.display.name}}"/>
+          <image wx:if="{{item.imageUrl}}" class="commerce-thumb" src="{{item.imageUrl}}" mode="aspectFill"/><view wx:else class="commerce-thumb thumb-empty">{{item.item_type === 'DESIGN' ? '设计' : '商品'}}</view>
+          <view class="grow" data-index="{{index}}" bindtap="detail"><view class="item-name">{{item.display.name}}</view><view class="item-note">{{item.display.spec_text}}</view><view wx:if="{{item.item_type === 'DESIGN'}}" class="item-note">固定版本 V{{item.display.version_no}}</view><view class="price">¥{{item.priceText}}</view><view wx:if="{{!item.purchasable}}" class="danger">{{item.unavailable_reason || '暂不可购买'}}</view></view>
+        </view><view class="row between actions"><button class="small-button secondary {{submitting ? 'is-disabled' : ''}}" data-id="{{item.cart_item_id}}" bindtap="remove" disabled="{{submitting}}">删除</button><view class="counter"><button class="{{submitting || item.quantity <= 1 ? 'is-disabled' : ''}}" data-index="{{index}}" data-delta="-1" bindtap="quantity" disabled="{{submitting || item.quantity <= 1}}" aria-label="减少数量">−</button><text>{{item.quantity}}</text><button class="{{submitting || item.quantity >= 999 ? 'is-disabled' : ''}}" data-index="{{index}}" data-delta="1" bindtap="quantity" disabled="{{submitting || item.quantity >= 999}}" aria-label="增加数量">＋</button></view></view>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="footer"><view class="cart-checkout-row"><view class="cart-total"><text>预估合计 </text><text class="price">{{subtotalText === '—' ? '—' : '¥' + subtotalText}}</text></view><button class="primary {{submitting || loading || !count ? 'is-disabled' : ''}}" bindtap="checkout" disabled="{{submitting || loading || !count}}">去结算（{{count}}）</button></view><view wx:if="{{goodsText}}" class="muted cart-price-parts cart-price-breakdown"><text>商品 </text><text>¥{{goodsText}}</text><text> · 券 </text><text>−¥{{discountText}}</text><text> · 运费 </text><text>¥{{shippingText}}</text></view><view wx:if="{{quoteLoading}}" class="muted">正在核算所选商品…</view><view wx:if="{{quoteError}}" class="danger">{{quoteError}}</view><view wx:if="{{quoteHint}}" class="muted">{{quoteHint}}</view><view class="muted cart-price-parts">最终金额在确认页由服务端核算。</view></view>
+</view>

@@ -1,0 +1,26 @@
+<view class="screen">
+  <navigation-bar title="设计详情" back="{{true}}" color="#242424" background="#ffffff"/>
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="{{loading ? 'is-disabled' : ''}}" wx:if="{{!detail}}" bindtap="load" disabled="{{loading}}">重新读取</button></view>
+    <view wx:if="{{loading && !detail}}" class="empty">正在读取设计…</view>
+    <view wx:if="{{detail}}">
+      <view class="section"><view class="page-title">{{detail.name}}</view><view class="item-note">V{{detail.version_no}} {{detail.version_no === currentVersion ? '· 当前版本' : '· 历史版本'}}</view>
+        <view class="actions"><button class="secondary {{submitting || loading ? 'is-disabled' : ''}}" bindtap="edit" disabled="{{submitting || loading}}">继续编辑</button><button class="secondary {{submitting || loading ? 'is-disabled' : ''}}" bindtap="copy" disabled="{{submitting || loading}}">复制为新设计</button></view>
+        <view class="item-note">复制后成为独立设计；加入购物车或购买固定使用当前所选版本。</view>
+      </view><view class="divider"/>
+      <view class="section"><view class="item-name">材料排列</view>
+        <view wx:for="{{components}}" wx:key="index" class="list-row">
+          <view class="row"><image wx:if="{{item.imageUrl}}" class="commerce-thumb" src="{{item.imageUrl}}" mode="aspectFill"/><view wx:else class="commerce-thumb thumb-empty">材料</view>
+            <view class="grow"><view class="item-name">{{index + 1}}. {{item.name}}</view><view class="item-note" wx:if="{{item.diameter}}">{{item.diameter}} mm</view><view class="link" wx:if="{{item.changed}}">材料信息已更新</view><view class="danger" wx:if="{{!item.purchasable}}">材料已失效：{{item.unavailable_reason || '暂不可购买'}}</view><view class="item-note" wx:if="{{item.missing}}">当前资料不存在，使用保存时快照展示。</view></view>
+          </view><view wx:if="{{item.changed}}" class="snapshot">保存时：{{item.snapshot.name}} {{item.snapshot.diameter_mm || ''}} mm</view>
+        </view>
+        <view class="empty" wx:if="{{!components.length}}">此版本没有材料</view>
+      </view><view class="divider"/>
+      <view class="section"><view class="item-name">历史版本</view><view wx:if="{{versionsError}}" class="danger">{{versionsError}}<button class="{{versionsLoading ? 'is-disabled' : ''}}" bindtap="loadVersions" disabled="{{versionsLoading}}">重试历史版本</button></view>
+        <button wx:for="{{versions}}" wx:key="design_version_id" class="version-button {{item.design_version_id === detail.design_version_id ? 'active' : ''}} {{submitting || loading ? 'is-disabled' : ''}}" data-id="{{item.design_version_id}}" bindtap="version" disabled="{{submitting || loading}}">V{{item.version_no}} {{item.version_no === currentVersion ? '· 当前' : ''}}　{{item.timeText}}</button>
+        <button wx:if="{{next}}" class="secondary {{versionsLoading ? 'is-disabled' : ''}}" bindtap="moreVersions" loading="{{versionsLoading}}" disabled="{{versionsLoading}}">更多版本</button>
+      </view>
+    </view>
+  </scroll-view>
+  <view wx:if="{{detail}}" class="footer"><view class="row between footer-note"><view>预计价 <text class="price" wx:if="{{estimateText !== '无法估算'}}">¥{{estimateText}}</text><text class="price" wx:else>{{estimateText}}</text></view><view class="counter"><text class="muted">数量</text><button class="{{quantity <= 1 || submitting ? 'is-disabled' : ''}}" data-delta="-1" bindtap="quantity" disabled="{{quantity <= 1 || submitting}}" aria-label="减少购买数量">−</button><text>{{quantity}}</text><button class="{{quantity >= 999 || submitting ? 'is-disabled' : ''}}" data-delta="1" bindtap="quantity" disabled="{{quantity >= 999 || submitting}}" aria-label="增加购买数量">＋</button></view></view><view class="muted estimate-note">按当前材料价与可用券估算，不含运费；最终以确认页核价为准。</view><view class="muted footer-note" wx:if="{{!purchasable}}">材料失效或当前预计价不可用，可继续编辑或复制。</view><view class="bottom-actions"><button class="secondary {{!purchasable || submitting || loading ? 'is-disabled' : ''}}" bindtap="addCart" disabled="{{!purchasable || submitting || loading}}" loading="{{submitting}}">加入购物车</button><button class="primary {{!purchasable || submitting || loading ? 'is-disabled' : ''}}" bindtap="buy" disabled="{{!purchasable || submitting || loading}}">立即购买</button></view></view>
+</view>

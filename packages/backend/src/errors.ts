@@ -1,4 +1,4 @@
-import type { ErrorCode } from '../../contracts/src';
+import type { ErrorCode } from '../../contracts/src/index';
 
 export class AppError extends Error {
   constructor(readonly code: ErrorCode, message: string) {

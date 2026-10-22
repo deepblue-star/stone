@@ -1,0 +1,10 @@
+<view class="screen">
+  <navigation-bar title="我的" back="{{false}}" background="#fff" color="#242424" />
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="section"><view class="page-title">我的</view><view class="muted">您好，欢迎来到 Stone</view></view>
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view class="invite-card"><view class="row between"><text>我的邀请码</text><text class="link" bindtap="invite">邀请记录 ›</text></view><view class="row invite-code"><text>{{summary?summary.points.invite_code:'—'}}</text><button wx:if="{{summary}}" size="mini" class="secondary" bindtap="copy">复制</button></view><view class="muted">好友完成首笔订单后，可获积分兑换免费珠子</view></view>
+    <view wx:if="{{summary}}" class="section muted">积分 {{summary.points.balance}} · 可用兑换券 {{summary.sku_coupons.available_count}}</view>
+    <view class="menu-list"><view wx:for="{{menus}}" wx:key="path" class="list-row row" data-index="{{index}}" bindtap="enter" aria-role="button" aria-label="{{item.title}}"><view class="menu-text"><view>{{item.title}}</view><view class="muted">{{item.detail}}</view></view><text class="chevron">›</text></view></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,9 @@
+<view class="screen"><navigation-bar title="优惠券" back="{{true}}" background="#fff" color="#242424" />
+  <view class="filters row"><button wx:for="{{filters}}" wx:key="value" class="{{status===item.value?'selected':''}}" data-value="{{item.value}}" bindtap="filter">{{item.name}}</button></view>
+  <scroll-view class="page-scroll" scroll-y type="list" bindscrolltolower="more"><view class="section">
+    <view wx:if="{{error}}" class="error-box">{{error}}<button class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="load">重新读取</button></view>
+    <view wx:if="{{!items.length&&!error}}" class="empty">{{loading?'正在读取…':'暂无此状态的优惠券'}}</view>
+    <view wx:for="{{items}}" wx:key="index" class="coupon-row row"><image wx:if="{{item.url}}" src="{{item.url}}" mode="aspectFit" /><view class="coupon-info"><view>{{item.item_name}}</view><view class="muted">{{item.diameter_mm?item.diameter_mm+' mm':'默认规格'}}</view><view wx:if="{{status==='AVAILABLE'}}">免费数量 {{item.available_count}}</view><view wx:if="{{status==='AVAILABLE'&&!item.available}}" class="muted">当前材料不可购买，稍后可重试</view><view wx:if="{{status==='LOCKED'}}" class="muted">订单 {{item.locked_order_no}}</view><view wx:if="{{status==='USED'}}" class="muted">订单 {{item.used_order_no}}</view><view wx:if="{{status==='REFUNDED'}}" class="muted">已退回 {{item.refunded_points}} 积分 · {{item.refund_reason}}</view><button wx:if="{{status!=='REFUNDED'}}" class="secondary" data-index="{{index}}" bindtap="use">{{status==='AVAILABLE'?'去 DIY 使用':'查看订单'}}</button></view></view>
+    <button wx:if="{{nextPage}}" class="secondary {{loading?'is-disabled':''}}" disabled="{{loading}}" bindtap="more">加载更多</button>
+  </view></scroll-view>
+</view>

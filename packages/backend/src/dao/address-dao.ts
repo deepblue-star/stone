@@ -59,7 +59,7 @@ export class AddressDAO {
     offset = 0,
   ): Promise<readonly AddressRow[]> {
     return this.db.query<AddressRow>(
-      `SELECT ${columns} FROM addresses WHERE _openid=? AND is_deleted=0 ORDER BY is_default DESC,id DESC LIMIT ? OFFSET ?`,
+      `SELECT ${columns} FROM addresses WHERE _openid=? AND is_deleted=0 ORDER BY is_default DESC,updated_at DESC,id DESC LIMIT ? OFFSET ?`,
       [openid, ...page(limit, offset)],
     );
   }
@@ -104,7 +104,7 @@ export class AddressDAO {
   async softDelete(openid: string, id: string): Promise<number> {
     return (
       await this.db.execute(
-        "UPDATE addresses SET is_deleted=1,updated_at=UTC_TIMESTAMP() WHERE _openid=? AND id=? AND is_deleted=0",
+        "UPDATE addresses SET is_deleted=1,is_default=0,updated_at=UTC_TIMESTAMP() WHERE _openid=? AND id=? AND is_deleted=0",
         [openid, id],
       )
     ).affectedRows;
